@@ -20,6 +20,7 @@ builder.Services.AddScoped<ITableRepository<Room>, RoomRepository>();
 builder.Services.AddScoped<ITableRepository<Booking>, BookingRepository>();
 builder.Services.AddScoped<ITableRepository<Role>, RoleRepository>();
 builder.Services.AddScoped<ITableRepository<AccountRole>, AccountRoleRepository>();
+builder.Services.AddScoped<ITableRepository<Account>, AccountRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

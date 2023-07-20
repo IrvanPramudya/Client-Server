@@ -34,8 +34,8 @@ namespace API.Data
             modelBuilder.Entity<Booking>().HasOne(r => r.Room).WithMany(b => b.Bookings).HasForeignKey(b => b.RoomGuid);
             //Employee
             modelBuilder.Entity<Booking>().HasOne(e => e.Employee).WithMany(b => b.Bookings).HasForeignKey(b => b.EmployeeGuid);
-            modelBuilder.Entity<Employee>().HasOne(e => e.Education).WithOne(em => em.Employee).HasForeignKey<Employee>(em => em.Guid);
-            modelBuilder.Entity<Employee>().HasOne(a => a.Account).WithOne(em => em.Employee).HasForeignKey<Employee>(em => em.Guid);
+            modelBuilder.Entity<Employee>().HasOne(e => e.Education).WithOne(em => em.Employee).HasForeignKey<Education>(em => em.Guid);
+            modelBuilder.Entity<Employee>().HasOne(a => a.Account).WithOne(em => em.Employee).HasForeignKey<Account>(em => em.Guid);
             //Account Roles
             modelBuilder.Entity<AccountRole>().HasOne(ar => ar.Account).WithMany(ac => ac.AccountRoles).HasForeignKey(ac => ac.AccountGuid);
             modelBuilder.Entity<AccountRole>().HasOne(ar => ar.Role).WithMany(r => r.AccountRoles).HasForeignKey(ac => ac.RoleGuid);
