@@ -23,7 +23,8 @@ namespace API.Controllers
                 return NotFound();
             }
             return Ok(result);
-        }[HttpGet("{guid}")]
+        }
+        [HttpGet("{guid}")]
         public IActionResult GetByGuid(Guid guid)
         {
             var result = _universityRepository.GetByGuid(guid);
