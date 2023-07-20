@@ -15,6 +15,8 @@ builder.Services.AddDbContext<BookingDbContext>(option => option.UseSqlServer(co
 // Add Service Lifetime
 builder.Services.AddScoped<ITableRepository<University>, UniversityRepository>();
 builder.Services.AddScoped<ITableRepository<Education>, EducationRepository>();
+builder.Services.AddScoped<ITableRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<ITableRepository<Room>, RoomRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
