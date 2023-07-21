@@ -13,14 +13,14 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<BookingDbContext>(option => option.UseSqlServer(connection));
 
 // Add Service Lifetime
-builder.Services.AddScoped<ITableRepository<University>, UniversityRepository>();
-builder.Services.AddScoped<ITableRepository<Education>, EducationRepository>();
-builder.Services.AddScoped<ITableRepository<Employee>, EmployeeRepository>();
-builder.Services.AddScoped<ITableRepository<Room>, RoomRepository>();
-builder.Services.AddScoped<ITableRepository<Booking>, BookingRepository>();
-builder.Services.AddScoped<ITableRepository<Role>, RoleRepository>();
-builder.Services.AddScoped<ITableRepository<AccountRole>, AccountRoleRepository>();
-builder.Services.AddScoped<ITableRepository<Account>, AccountRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IEducationRepository, EducationRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

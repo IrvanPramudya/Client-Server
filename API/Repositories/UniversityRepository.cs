@@ -5,74 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
-    public class UniversityRepository : ITableRepository<University>
+    public class UniversityRepository : TableRepository<University>, IUniversityRepository
     {
-        private readonly BookingDbContext _context;
-
-        public UniversityRepository(BookingDbContext context)
+        public UniversityRepository(BookingDbContext context) : base(context)
         {
-            _context = context;
         }
 
-        public University Create(University entity)
+        public IEnumerable<University> GetByName(string name)
         {
-            try
-            {
-                _context.Set<University>()
-                        .Add(entity);
-                _context.SaveChanges();
-
-                return entity;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public bool Delete(University entity)
-        {
-            try
-            {
-                _context.Set<University>()
-                        .Remove(entity);
-                _context.SaveChanges() ;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public IEnumerable<University> GetAll()
-        {
-            return _context.Set<University>()
-                    .ToList();
-        }
-
-        public University? GetByGuid(Guid guid)
-        {
-            var data = _context.Set<University>()
-                               .Find(guid);
-            _context.ChangeTracker.Clear();
-            return data;
-        }
-
-        public bool Update(University entity)
-        {
-
-            try
-            {
-                _context.Entry(entity)
-                        .State = EntityState.Modified;
-                _context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return _context.Set<University>().Where(university => university.Name.Contains(name)).ToList();
         }
     }
 }
