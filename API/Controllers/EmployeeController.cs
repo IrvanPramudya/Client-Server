@@ -9,9 +9,9 @@ namespace API.Controllers
     [Route("/api/employee")]
     public class EmployeeController: ControllerBase
     {
-        private readonly ITableRepository<Employee> _employee;
+        private readonly IEmployeeRepository _employee;
 
-        public EmployeeController(ITableRepository<Employee> employee)
+        public EmployeeController(IEmployeeRepository employee)
         {
             _employee = employee;
         }

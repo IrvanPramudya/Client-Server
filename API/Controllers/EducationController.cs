@@ -9,9 +9,9 @@ namespace API.Controllers
     [Route("/api/education")]
     public class EducationController: ControllerBase
     {
-        private readonly ITableRepository<Education> _education;
+        private readonly IEducationRepository _education;
 
-        public EducationController(ITableRepository<Education> education)
+        public EducationController(IEducationRepository education)
         {
             _education = education;
         }

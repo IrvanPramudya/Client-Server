@@ -9,9 +9,9 @@ namespace API.Controllers
     [Route("/api/account")]
     public class AccountController: ControllerBase
     {
-        private readonly ITableRepository<Account> _account;
+        private readonly IAccountRepository _account;
 
-        public AccountController(ITableRepository<Account> account)
+        public AccountController(IAccountRepository account)
         {
             _account = account;
         }

@@ -9,9 +9,9 @@ namespace API.Controllers
     [Route("/api/booking")]
     public class BookingController: ControllerBase
     {
-        private readonly ITableRepository<Booking> _booking;
+        private readonly IBookingRepository _booking;
 
-        public BookingController(ITableRepository<Booking> booking)
+        public BookingController(IBookingRepository booking)
         {
             _booking = booking;
         }

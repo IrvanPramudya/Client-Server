@@ -9,9 +9,9 @@ namespace API.Controllers
     [Route("/api/role")]
     public class RoleController: ControllerBase
     {
-        private readonly ITableRepository<Role> _role;
+        private readonly IRoleRepository _role;
 
-        public RoleController(ITableRepository<Role> role)
+        public RoleController(IRoleRepository role)
         {
             _role = role;
         }
