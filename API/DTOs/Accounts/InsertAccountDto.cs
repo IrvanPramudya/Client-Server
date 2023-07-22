@@ -2,7 +2,7 @@
 
 namespace API.DTOs.Accounts
 {
-    public class GetViewAccountDto
+    public class InsertAccountDto
     {
         public Guid Guid { get; set; }
         public int Otp { get; set; }
@@ -10,7 +10,7 @@ namespace API.DTOs.Accounts
         public bool IsUsed { get; set; }
         public DateTime ExpiredTime { get; set; }
 
-        public static implicit operator Account(GetViewAccountDto dto)
+        public static implicit operator Account(InsertAccountDto dto)
         {
             return new Account
             {
@@ -19,18 +19,19 @@ namespace API.DTOs.Accounts
                 Password = dto.Password,
                 IsUsed = dto.IsUsed,
                 ExpiredTime = dto.ExpiredTime,
-                ModifiedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
             };
         }
-        public static explicit operator GetViewAccountDto(Account account)
+        public static explicit operator InsertAccountDto(Account account)
         {
-            return new GetViewAccountDto
+            return new InsertAccountDto
             {
                 Guid = account.Guid,
                 Otp = account.Otp,
                 Password = account.Password,
                 IsUsed = account.IsUsed,
-                ExpiredTime = account.ExpiredTime
+                ExpiredTime = account.ExpiredTime,
             };
         }
     }

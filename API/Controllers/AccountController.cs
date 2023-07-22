@@ -1,7 +1,10 @@
 ﻿using API.Contracts;
+using API.DTOs.Accounts;
 using API.Models;
 using API.Repositories;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace API.Controllers
 {
@@ -9,12 +12,13 @@ namespace API.Controllers
     [Route("/api/account")]
     public class AccountController: ControllerBase
     {
-        private readonly IAccountRepository _account;
+        private readonly AccountService _account;
 
-        public AccountController(IAccountRepository account)
+        public AccountController(AccountService account)
         {
             _account = account;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -36,7 +40,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Create(Account account)
+        public IActionResult Create(InsertAccountDto account)
         {
             var result = _account.Create(account);
             if(result == null)
@@ -46,15 +50,14 @@ namespace API.Controllers
             return Ok("Data Added");
         }
         [HttpPut]
-        public IActionResult Update(Account account)
+        public IActionResult Update(GetViewAccountDto account)
         {
-            var data = _account.GetByGuid(account.Guid);
-            if(data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
             var result = _account.Update(account);
-            if(!result)
+            if(result == 0)
+            {
+                return StatusCode(500, "Error Retreiving to Database");
+            }
+            if(result == -1)
             {
                 return StatusCode(500, "Error Retreiving to Database");
             }
@@ -63,17 +66,16 @@ namespace API.Controllers
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var data = _account.GetByGuid(guid);
-            if (data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
-            var result = _account.Delete(data);
-            if(!result)
+            var result = _account.Delete(guid);
+            if (result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
             }
-            return Ok("Data Deleted");
+            if (result == -1)
+            {
+                return StatusCode(500, "Error Retreiving to Database");
+            }
+            return Ok("Data Updated");
         }
     }
 }
