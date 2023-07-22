@@ -1,6 +1,8 @@
 ﻿using API.Contracts;
+using API.DTOs.Employees;
 using API.Models;
 using API.Repositories;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,12 +11,13 @@ namespace API.Controllers
     [Route("/api/employee")]
     public class EmployeeController: ControllerBase
     {
-        private readonly IEmployeeRepository _employee;
+        private readonly EmployeeService _employee;
 
-        public EmployeeController(IEmployeeRepository employee)
+        public EmployeeController(EmployeeService employee)
         {
             _employee = employee;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -36,7 +39,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(InsertEmployeeDto employee)
         {
             var result = _employee.Create(employee);
             if(result == null)
@@ -46,32 +49,30 @@ namespace API.Controllers
             return Ok("Data Added");
         }
         [HttpPut]
-        public IActionResult Update(Employee employee)
+        public IActionResult Update(GetViewEmployeeDto employee)
         {
-            var data = _employee.GetByGuid(employee.Guid);
-            if(data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
             var result = _employee.Update(employee);
-            if(!result)
+            if (result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if (result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var data = _employee.GetByGuid(guid);
-            if (data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
-            var result = _employee.Delete(data);
-            if(!result)
+            var result = _employee.Delete(guid);
+            if (result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if (result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Deleted");
         }
