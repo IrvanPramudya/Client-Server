@@ -1,6 +1,5 @@
-﻿using API.Contracts;
-using API.Models;
-using API.Repositories;
+﻿using API.DTOs.Bookings;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,12 +8,13 @@ namespace API.Controllers
     [Route("/api/booking")]
     public class BookingController: ControllerBase
     {
-        private readonly IBookingRepository _booking;
+        private readonly BookingService _booking;
 
-        public BookingController(IBookingRepository booking)
+        public BookingController(BookingService booking)
         {
             _booking = booking;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -36,7 +36,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Create(Booking booking)
+        public IActionResult Create(InsertBookingDto booking)
         {
             var result = _booking.Create(booking);
             if(result == null)
@@ -46,32 +46,30 @@ namespace API.Controllers
             return Ok("Data Added");
         }
         [HttpPut]
-        public IActionResult Update(Booking booking)
+        public IActionResult Update(GetViewBookingDto booking)
         {
-            var data = _booking.GetByGuid(booking.Guid);
-            if(data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
             var result = _booking.Update(booking);
-            if(!result)
+            if(result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if(result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var data = _booking.GetByGuid(guid);
-            if (data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
-            var result = _booking.Delete(data);
-            if(!result)
+            var result = _booking.Delete(guid);
+            if(result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if(result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Deleted");
         }
