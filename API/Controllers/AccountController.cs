@@ -59,7 +59,7 @@ namespace API.Controllers
             }
             if(result == -1)
             {
-                return StatusCode(500, "Error Retreiving to Database");
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
@@ -73,7 +73,7 @@ namespace API.Controllers
             }
             if (result == -1)
             {
-                return StatusCode(500, "Error Retreiving to Database");
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
