@@ -1,10 +1,6 @@
-﻿using API.Contracts;
-using API.DTOs.Accounts;
-using API.Models;
-using API.Repositories;
+﻿using API.DTOs.Accounts;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Principal;
 
 namespace API.Controllers
 {

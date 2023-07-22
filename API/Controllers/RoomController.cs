@@ -1,6 +1,4 @@
-﻿using API.Contracts;
-using API.DTOs.Rooms;
-using API.Models;
+﻿using API.DTOs.Rooms;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 

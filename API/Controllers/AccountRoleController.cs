@@ -1,6 +1,5 @@
-﻿using API.Contracts;
-using API.Models;
-using API.Repositories;
+﻿using API.DTOs.AccountRoles;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,12 +8,13 @@ namespace API.Controllers
     [Route("/api/accountrole")]
     public class AccountRoleController: ControllerBase
     {
-        private readonly IAccountRoleRepository _accountrole;
+        private readonly AccountRoleService _accountrole;
 
-        public AccountRoleController(IAccountRoleRepository accountrole)
+        public AccountRoleController(AccountRoleService accountrole)
         {
             _accountrole = accountrole;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -36,7 +36,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Create(AccountRole accountrole)
+        public IActionResult Create(InsertAccountRoleDto accountrole)
         {
             var result = _accountrole.Create(accountrole);
             if(result == null)
@@ -46,32 +46,30 @@ namespace API.Controllers
             return Ok("Data Added");
         }
         [HttpPut]
-        public IActionResult Update(AccountRole accountrole)
+        public IActionResult Update(GetViewAccountRoleDto accountrole)
         {
-            var data = _accountrole.GetByGuid(accountrole.Guid);
-            if(data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
             var result = _accountrole.Update(accountrole);
-            if(!result)
+            if (result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if (result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var data = _accountrole.GetByGuid(guid);
-            if (data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
-            var result = _accountrole.Delete(data);
-            if(!result)
+            var result = _accountrole.Delete(guid);
+            if (result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if (result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Deleted");
         }
