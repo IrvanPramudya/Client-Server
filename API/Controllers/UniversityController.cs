@@ -1,6 +1,4 @@
-﻿using API.Contracts;
-using API.DTOs.Universities;
-using API.Models;
+﻿using API.DTOs.Universities;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
