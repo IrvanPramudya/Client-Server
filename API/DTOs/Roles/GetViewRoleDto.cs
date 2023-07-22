@@ -13,7 +13,6 @@ namespace API.DTOs.Roles
             {
                 Guid = getViewRoleDto.Guid,
                 Name = getViewRoleDto.Name,
-                CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now
             };
         }

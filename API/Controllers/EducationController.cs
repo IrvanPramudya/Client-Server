@@ -1,6 +1,8 @@
 ﻿using API.Contracts;
+using API.DTOs.Educations;
 using API.Models;
 using API.Repositories;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,12 +11,13 @@ namespace API.Controllers
     [Route("/api/education")]
     public class EducationController: ControllerBase
     {
-        private readonly IEducationRepository _education;
+        private readonly EducationService _education;
 
-        public EducationController(IEducationRepository education)
+        public EducationController(EducationService education)
         {
             _education = education;
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -36,7 +39,7 @@ namespace API.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Create(Education education)
+        public IActionResult Create(InsertEducationDto education)
         {
             var result = _education.Create(education);
             if(result == null)
@@ -46,32 +49,30 @@ namespace API.Controllers
             return Ok("Data Added");
         }
         [HttpPut]
-        public IActionResult Update(Education education)
+        public IActionResult Update(GetViewEducationDto education)
         {
-            var data = _education.GetByGuid(education.Guid);
-            if(data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
             var result = _education.Update(education);
-            if(!result)
+            if(result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if(result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Updated");
         }
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var data = _education.GetByGuid(guid);
-            if (data == null)
-            {
-                return NotFound("Guid Not Found");
-            }
-            var result = _education.Delete(data);
-            if(!result)
+            var result = _education.Delete(guid);
+            if(result == 0)
             {
                 return StatusCode(500, "Error Retreiving to Database");
+            }
+            if(result == -1)
+            {
+                return StatusCode(404, "Guid Not Found");
             }
             return Ok("Data Deleted");
         }

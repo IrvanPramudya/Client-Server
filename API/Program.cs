@@ -27,6 +27,7 @@ builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<UniversityService>();
 builder.Services.AddScoped<RoomService>();
 builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<EducationService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
