@@ -35,14 +35,14 @@ namespace API.Services
             }
             return (GetViewEducationDto?)data;
         }
-        public InsertEducationDto? Create(InsertEducationDto education)
+        public GetViewEducationDto? Create(InsertEducationDto education)
         {
             var data = _repository.Create(education);
             if(data == null)
             {
                 return null;
             }
-            return (InsertEducationDto?)data;
+            return (GetViewEducationDto?)data;
         }
         public int Update(GetViewEducationDto education)
         {

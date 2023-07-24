@@ -35,14 +35,14 @@ namespace API.Services
             }
             return (GetViewAccountRoleDto?)data;
         }
-        public InsertAccountRoleDto? Create(InsertAccountRoleDto dto)
+        public GetViewAccountRoleDto? Create(InsertAccountRoleDto dto)
         {
             var data = _repository.Create(dto);
             if( data == null)
             {
                 return null;
             }
-            return (InsertAccountRoleDto?)data;
+            return (GetViewAccountRoleDto?)data;
         }
         public int Update(GetViewAccountRoleDto dto)
         {

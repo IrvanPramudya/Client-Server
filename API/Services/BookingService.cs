@@ -35,14 +35,14 @@ namespace API.Services
             }
             return (GetViewBookingDto)data;
         }
-        public InsertBookingDto Create(InsertBookingDto dto)
+        public GetViewBookingDto? Create(InsertBookingDto dto)
         {
             var data = _repository.Create(dto);
             if( data == null)
             {
                 return null;
             }
-            return (InsertBookingDto)data;
+            return (GetViewBookingDto?)data;
         }
         public int Update(GetViewBookingDto dto)
         {
