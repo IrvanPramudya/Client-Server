@@ -11,9 +11,6 @@ namespace API.Utilities.Validations.Employee
         public InsertEmployeeValidator(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            RuleFor(employee => employee.Nik)
-                .NotEmpty().WithMessage("NIK is Required")
-                .MaximumLength(6).WithMessage("Maximum 6 Character");
             RuleFor(employee => employee.FirstName)
                 .NotEmpty().WithMessage("First Name is Required");
             RuleFor(employee => employee.BirthDate)

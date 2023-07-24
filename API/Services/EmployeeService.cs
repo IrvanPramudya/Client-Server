@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.DTOs.Employees;
 using API.Models;
+using API.Utilities.Handlers;
 
 namespace API.Services
 {
@@ -35,14 +36,16 @@ namespace API.Services
             }
             return (GetViewEmployeeDto)data;
         }
-        public InsertEmployeeDto Create(InsertEmployeeDto dto)
+        public GetViewEmployeeDto? Create(InsertEmployeeDto dto)
         {
-            var data = _repository.Create(dto);
+            Employee tocreate = dto;
+            tocreate.Nik = GenerateHandler.LastNik(_repository.GetLastNik());
+            var data = _repository.Create(tocreate);
             if( data == null)
             {
                 return null;
             }
-            return (InsertEmployeeDto)data;
+            return (GetViewEmployeeDto)data;
         }
         public int Update(GetViewEmployeeDto dto)
         {

@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace API.Utilities.Validations.Rooms
 {
-    public class UpdateRoomValidation:AbstractValidator<NewRoomDto>
+    public class UpdateRoomValidation:AbstractValidator<RoomDto>
     {
         private readonly IRoomRepository _repository;
 

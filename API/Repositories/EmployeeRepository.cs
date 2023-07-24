@@ -18,10 +18,11 @@ namespace API.Repositories
                            ||employee.PhoneNumber.Contains(value)) is null;
         }
 
-        /*Employee? IEmployeeRepository.GetLastNik()
-        {
-            var data = _context.Set<Employee>().Last(employee => employee.Nik);
-        }*/
 
+        string? IEmployeeRepository.GetLastNik()
+        {
+            var data = _context.Set<Employee>().OrderByDescending(e=>e.CreatedDate).FirstOrDefault().Nik;
+            return data;
+        }
     }
 }

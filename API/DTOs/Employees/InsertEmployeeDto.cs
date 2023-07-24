@@ -1,11 +1,11 @@
 ﻿using API.Models;
 using API.Utilities.Enums;
+using API.Utilities.Handlers;
 
 namespace API.DTOs.Employees
 {
     public class InsertEmployeeDto
     {
-        public string Nik { get; set; }
         public string FirstName { get; set; }
         public string? LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -19,7 +19,6 @@ namespace API.DTOs.Employees
             return new Employee
             {
                 Guid                = new Guid(),
-                Nik                 = dto.Nik,
                 FirstName           = dto.FirstName,
                 LastName            = dto.LastName,
                 BirthDate           = dto.BirthDate,
@@ -36,7 +35,6 @@ namespace API.DTOs.Employees
         {
             return new InsertEmployeeDto
             {
-                Nik                 = employee.Nik,
                 FirstName           = employee.FirstName,
                 LastName            = employee.LastName,
                 BirthDate           = employee.BirthDate,

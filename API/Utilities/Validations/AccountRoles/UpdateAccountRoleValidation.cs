@@ -6,11 +6,8 @@ namespace API.Utilities.Validations.AccountRoles
 {
     public class UpdateAccountRoleValidation:AbstractValidator<GetViewAccountRoleDto>
     {
-        private readonly IAccountRoleRepository _repository;
-
         public UpdateAccountRoleValidation(IAccountRoleRepository repository)
         {
-            _repository = repository;
             RuleFor(accounrole => accounrole.AccountGuid)
                 .NotEmpty().WithMessage("Account Guid can not be Null");
             RuleFor(accounrole => accounrole.RoleGuid)

@@ -1,13 +1,12 @@
-﻿using API.Contracts;
-using API.DTOs.Bookings;
+﻿using API.DTOs.Bookings;
 using FluentValidation;
 
 namespace API.Utilities.Validations.Bookings
 {
-    public class UpdateBookingValidation:AbstractValidator<GetViewBookingDto>
+    public class InsertBookingValidation : AbstractValidator<InsertBookingDto>
     { 
 
-        public UpdateBookingValidation()
+        public InsertBookingValidation()
         {
             RuleFor(booking => booking.StartDate)
                 .NotEmpty().WithMessage("Start Date can not be Null");

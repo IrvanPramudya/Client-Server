@@ -6,8 +6,6 @@ namespace API.Utilities.Validations.Accounts
 {
     public class InsertAccountValidation:AbstractValidator<InsertAccountDto>
     {
-        private readonly IAccountRepository _repository;
-
         public InsertAccountValidation()
         {
             RuleFor(account => account.Password)

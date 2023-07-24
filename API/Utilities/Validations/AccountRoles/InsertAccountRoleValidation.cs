@@ -6,7 +6,6 @@ namespace API.Utilities.Validations.AccountRoles
 {
     public class InsertAccountRoleValidation:AbstractValidator<InsertAccountRoleDto>
     {
-
         public InsertAccountRoleValidation(IAccountRoleRepository repository)
         {
             RuleFor(accounrole => accounrole.AccountGuid)

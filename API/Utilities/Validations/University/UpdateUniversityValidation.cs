@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace API.Utilities.Validations.University
 {
-    public class UpdateUniversityValidation:AbstractValidator<NewUniversityDto>
+    public class UpdateUniversityValidation:AbstractValidator<UniversityDto>
     {
         private readonly IUniversityRepository _repository;
 
