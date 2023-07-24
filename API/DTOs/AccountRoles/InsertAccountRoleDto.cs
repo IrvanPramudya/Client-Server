@@ -11,19 +11,19 @@ namespace API.DTOs.AccountRoles
         {
             return new AccountRole
             {
-                Guid = new Guid(),
-                AccountGuid = dto.AccountGuid,
-                RoleGuid = dto.RoleGuid,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now
+                Guid            = new Guid(),
+                AccountGuid     = dto.AccountGuid,
+                RoleGuid        = dto.RoleGuid,
+                CreatedDate     = DateTime.Now,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator InsertAccountRoleDto(AccountRole accountRole)
         {
             return new InsertAccountRoleDto
             {
-                AccountGuid = accountRole.AccountGuid,
-                RoleGuid = accountRole.RoleGuid
+                AccountGuid     = accountRole.AccountGuid,
+                RoleGuid        = accountRole.RoleGuid
             };
         }
     }

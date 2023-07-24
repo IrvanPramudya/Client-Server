@@ -11,9 +11,9 @@ namespace API.DTOs.Roles
         {
             return new Role
             {
-                Guid = getViewRoleDto.Guid,
-                Name = getViewRoleDto.Name,
-                ModifiedDate = DateTime.Now
+                Guid            = getViewRoleDto.Guid,
+                Name            = getViewRoleDto.Name,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator GetViewRoleDto(Role role)

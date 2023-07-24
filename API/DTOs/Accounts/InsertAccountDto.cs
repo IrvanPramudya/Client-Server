@@ -14,23 +14,23 @@ namespace API.DTOs.Accounts
         {
             return new Account
             {
-                Guid = dto.Guid,
-                Otp = dto.Otp,
-                Password = dto.Password,
-                IsUsed = dto.IsUsed,
-                ExpiredTime = dto.ExpiredTime,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
+                Guid            = dto.Guid,
+                Otp             = dto.Otp,
+                Password        = dto.Password,
+                IsUsed          = dto.IsUsed,
+                ExpiredTime     = dto.ExpiredTime,
+                CreatedDate     = DateTime.Now,
+                ModifiedDate    = DateTime.Now,
             };
         }
         public static explicit operator InsertAccountDto(Account account)
         {
             return new InsertAccountDto
             {
-                Guid = account.Guid,
-                Otp = account.Otp,
-                Password = account.Password,
-                IsUsed = account.IsUsed,
+                Guid        = account.Guid,
+                Otp         = account.Otp,
+                Password    = account.Password,
+                IsUsed      = account.IsUsed,
                 ExpiredTime = account.ExpiredTime,
             };
         }

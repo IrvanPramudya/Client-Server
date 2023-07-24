@@ -14,23 +14,23 @@ namespace API.DTOs.Educations
         {
             return new Education
             {
-                Guid = getViewEducationDto.Guid,
-                Major = getViewEducationDto.Major,
-                Degree = getViewEducationDto.Degree,
-                Gpa = getViewEducationDto.Gpa,
-                UniversityGuid = getViewEducationDto.UniversityGuid,
-                ModifiedDate = DateTime.Now
+                Guid            = getViewEducationDto.Guid,
+                Major           = getViewEducationDto.Major,
+                Degree          = getViewEducationDto.Degree,
+                Gpa             = getViewEducationDto.Gpa,
+                UniversityGuid  = getViewEducationDto.UniversityGuid,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator GetViewEducationDto(Education education)
         {
             return new GetViewEducationDto
             {
-                Guid = education.Guid,
-                Major = education.Major,
-                Degree = education.Degree,
-                Gpa = education.Gpa,
-                UniversityGuid = education.UniversityGuid
+                Guid            = education.Guid,
+                Major           = education.Major,
+                Degree          = education.Degree,
+                Gpa             = education.Gpa,
+                UniversityGuid  = education.UniversityGuid
             };
         }
     }

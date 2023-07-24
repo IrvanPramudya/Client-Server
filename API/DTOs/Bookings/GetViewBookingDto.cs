@@ -17,27 +17,27 @@ namespace API.DTOs.Bookings
         {
             return new Booking
             {
-                Guid = dto.Guid,
-                StartDate = dto.StartDate,
-                EndDate = dto.EndDate,
-                Status = dto.Status,
-                Remarks = dto.Remarks,
-                RoomGuid = dto.RoomGuid,
-                EmployeeGuid = dto.EmployeeGuid,
-                ModifiedDate = DateTime.Now
+                Guid            = dto.Guid,
+                StartDate       = dto.StartDate,
+                EndDate         = dto.EndDate,
+                Status          = dto.Status,
+                Remarks         = dto.Remarks,
+                RoomGuid        = dto.RoomGuid,
+                EmployeeGuid    = dto.EmployeeGuid,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator GetViewBookingDto(Booking booking)
         {
             return new GetViewBookingDto
             {
-                Guid = booking.Guid,
-                StartDate = booking.StartDate,
-                EndDate = booking.EndDate,
-                Status = booking.Status,
-                Remarks = booking.Remarks,
-                RoomGuid = booking.RoomGuid,
-                EmployeeGuid = booking.EmployeeGuid
+                Guid            = booking.Guid,
+                StartDate       = booking.StartDate,
+                EndDate         = booking.EndDate,
+                Status          = booking.Status,
+                Remarks         = booking.Remarks,
+                RoomGuid        = booking.RoomGuid,
+                EmployeeGuid    = booking.EmployeeGuid
             };
         }
 

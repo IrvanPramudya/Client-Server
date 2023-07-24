@@ -13,21 +13,21 @@ namespace API.DTOs.Rooms
         {
             return new Room
             {
-                Guid = new Guid(),
-                Name = newRoomDto.Name,
-                Floor = newRoomDto.Floor,
-                Capacity = newRoomDto.Capacity,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
+                Guid            = new Guid(),
+                Name            = newRoomDto.Name,
+                Floor           = newRoomDto.Floor,
+                Capacity        = newRoomDto.Capacity,
+                CreatedDate     = DateTime.Now,
+                ModifiedDate    = DateTime.Now,
             };
         }
         public static explicit operator NewRoomDto(Room room)
         {
             return new NewRoomDto
             {
-                Name = room.Name,
-                Floor = room.Floor,
-                Capacity = room.Capacity
+                Name            = room.Name,
+                Floor           = room.Floor,
+                Capacity        = room.Capacity
             };
         }
     }

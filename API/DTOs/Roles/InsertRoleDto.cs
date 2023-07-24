@@ -11,10 +11,10 @@ namespace API.DTOs.Roles
         {
             return new Role
             {
-                Guid = new Guid(),
-                Name = insertRoleDto.Name,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now
+                Guid            = new Guid(),
+                Name            = insertRoleDto.Name,
+                CreatedDate     = DateTime.Now,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator InsertRoleDto(Role role)

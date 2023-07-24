@@ -10,5 +10,10 @@ namespace API.Repositories
         public RoleRepository(BookingDbContext context) : base(context)
         {
         }
+
+        public bool IsNotExist(string value)
+        {
+            return _context.Set<Role>().SingleOrDefault(role => role.Name.Contains(value))is null;
+        }
     }
 }

@@ -19,31 +19,31 @@ namespace API.DTOs.Employees
         {
             return new Employee
             {
-                Guid = dto.Guid,
-                Nik = dto.Nik,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                BirthDate = dto.BirthDate,
-                Gender = dto.Gender,
-                HiringDate = dto.HiringDate,
-                Email = dto.Email,
-                PhoneNumber = dto.PhoneNumber,
-                ModifiedDate = DateTime.Now
+                Guid            = dto.Guid,
+                Nik             = dto.Nik,
+                FirstName       = dto.FirstName,
+                LastName        = dto.LastName,
+                BirthDate       = dto.BirthDate,
+                Gender          = dto.Gender,
+                HiringDate      = dto.HiringDate,
+                Email           = dto.Email,
+                PhoneNumber     = dto.PhoneNumber,
+                ModifiedDate    = DateTime.Now
             };
         }
         public static explicit operator GetViewEmployeeDto(Employee employee)
         {
             return new GetViewEmployeeDto
             {
-                Guid = employee.Guid,
-                Nik = employee.Nik,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                BirthDate = employee.BirthDate,
-                Gender = employee.Gender,
-                HiringDate = employee.HiringDate,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
+                Guid            = employee.Guid,
+                Nik             = employee.Nik,
+                FirstName       = employee.FirstName,
+                LastName        = employee.LastName,
+                BirthDate       = employee.BirthDate,
+                Gender          = employee.Gender,
+                HiringDate      = employee.HiringDate,
+                Email           = employee.Email,
+                PhoneNumber     = employee.PhoneNumber,
             };
         }
     }

@@ -12,10 +12,10 @@ namespace API.DTOs.Universities
         {
             return new University
             {
-                Guid = universitydto.Guid,
-                Code = universitydto.Code,
-                Name = universitydto.Name,
-                ModifiedDate = DateTime.Now
+                Guid            = universitydto.Guid,
+                Code            = universitydto.Code,
+                Name            = universitydto.Name,
+                ModifiedDate    = DateTime.Now
 
             };
         }

@@ -71,7 +71,7 @@ namespace API.Controllers
             {
                 return StatusCode(404, "Guid Not Found");
             }
-            return Ok("Data Updated");
+            return Ok("Data Deleted");
         }
     }
 }

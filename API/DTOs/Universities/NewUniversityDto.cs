@@ -12,11 +12,11 @@ namespace API.DTOs.Universities
         {
             return new University
             {
-                Guid = new Guid(),
-                Code = newUniversitydto.Code,
-                Name = newUniversitydto.Name,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
+                Guid            = new Guid(),
+                Code            = newUniversitydto.Code,
+                Name            = newUniversitydto.Name,
+                CreatedDate     = DateTime.Now,
+                ModifiedDate    = DateTime.Now,
             };
         }
         public static explicit operator NewUniversityDto(University university)

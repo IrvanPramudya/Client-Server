@@ -18,17 +18,17 @@ namespace API.DTOs.Employees
         {
             return new Employee
             {
-                Guid = new Guid(),
-                Nik = dto.Nik,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                BirthDate = dto.BirthDate,
-                Gender = dto.Gender,
-                HiringDate = dto.HiringDate,
-                Email = dto.Email,
-                PhoneNumber = dto.PhoneNumber,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now
+                Guid                = new Guid(),
+                Nik                 = dto.Nik,
+                FirstName           = dto.FirstName,
+                LastName            = dto.LastName,
+                BirthDate           = dto.BirthDate,
+                Gender              = dto.Gender,
+                HiringDate          = dto.HiringDate,
+                Email               = dto.Email,
+                PhoneNumber         = dto.PhoneNumber,
+                CreatedDate         = DateTime.Now,
+                ModifiedDate        = DateTime.Now
 
             };
         }
@@ -36,14 +36,14 @@ namespace API.DTOs.Employees
         {
             return new InsertEmployeeDto
             {
-                Nik = employee.Nik,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                BirthDate = employee.BirthDate,
-                Gender = employee.Gender,
-                HiringDate = employee.HiringDate,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
+                Nik                 = employee.Nik,
+                FirstName           = employee.FirstName,
+                LastName            = employee.LastName,
+                BirthDate           = employee.BirthDate,
+                Gender              = employee.Gender,
+                HiringDate          = employee.HiringDate,
+                Email               = employee.Email,
+                PhoneNumber         = employee.PhoneNumber,
             };
         }
     }

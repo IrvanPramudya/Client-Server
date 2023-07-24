@@ -1,7 +1,4 @@
-﻿using API.Contracts;
-using API.DTOs.Employees;
-using API.Models;
-using API.Repositories;
+﻿using API.DTOs.Employees;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 

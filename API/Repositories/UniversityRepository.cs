@@ -15,5 +15,11 @@ namespace API.Repositories
         {
             return _context.Set<University>().Where(university => university.Name.Contains(name)).ToList();
         }
+
+        bool IUniversityRepository.IsNotExist(string value)
+        {
+            return _context.Set<University>().SingleOrDefault(university=>university.Name.Contains(value)
+                                            ||university.Code.Contains(value))is null;
+        }
     }
 }
