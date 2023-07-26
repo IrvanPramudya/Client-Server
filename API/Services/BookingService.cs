@@ -69,65 +69,60 @@ namespace API.Services
             var result = _repository.Delete(data);
             return result ? 1 : 0;
         }
-        public BookingDto? BookingLength(BookingLengthDto bookingLengthDto)
+        public IEnumerable<BookingDto?> BookingLength()
         {
-            var getbooking = _repository.GetByGuid(bookingLengthDto.BookingGuid);
-            if(getbooking == null)
-            {
-                return null;
-            }
-            var getroom = _roomrepository.GetByGuid(getbooking.RoomGuid);
-            if (getroom == null)
-            {
-                return null;
-            }
-            var startdate = getbooking.StartDate;
-            var enddate = getbooking.EndDate;
-            TimeSpan bookinglength = new TimeSpan();
+            var bookinglist = new List<BookingDto>();
+            var getbooking = _repository.GetAll();
             TimeSpan length = new TimeSpan();
-            TimeSpan Start = new TimeSpan(09,00,00);
-            TimeSpan End = new TimeSpan(17,00,00);
-            TimeSpan OneDay = new TimeSpan(08,00,00);
-            while(startdate<enddate)
+            TimeSpan Start = new TimeSpan(09, 00, 00);
+            TimeSpan End = new TimeSpan(17, 00, 00);
+            TimeSpan OneDay = new TimeSpan(08, 00, 00);
+            if (getbooking == null)
             {
-                if (startdate.DayOfWeek != DayOfWeek.Sunday && startdate.DayOfWeek != DayOfWeek.Saturday)
+                return null;
+            }
+            foreach(var bookings  in getbooking)
+            {
+                TimeSpan bookinglength = new TimeSpan();
+                var startdate = bookings.StartDate;
+                var enddate = bookings.EndDate;
+                while (startdate < enddate)
                 {
-                    while(startdate.TimeOfDay < Start)
+                    if (startdate.DayOfWeek != DayOfWeek.Sunday && startdate.DayOfWeek != DayOfWeek.Saturday)
                     {
-                        startdate.AddMinutes(1);
-                    }
-                    if(startdate.TimeOfDay>=Start && enddate.TimeOfDay<=End)
-                    {
-                        if(startdate.TimeOfDay == enddate.TimeOfDay && startdate.Date < enddate.Date)
+                        if (startdate.TimeOfDay >= Start && enddate.TimeOfDay <= End)
                         {
-                            bookinglength += OneDay;
+                            if (startdate.TimeOfDay == enddate.TimeOfDay && startdate.Date < enddate.Date)
+                            {
+                                bookinglength += OneDay;
+                            }
+                            else
+                            {
+                                length = enddate.TimeOfDay - startdate.TimeOfDay;
+                                bookinglength += length;
+                            }
                         }
                         else
                         {
-                            length = enddate.TimeOfDay - startdate.TimeOfDay;
-                            bookinglength += length;
+                            bookinglength += OneDay;
                         }
+                        startdate = startdate.AddDays(1);
                     }
                     else
                     {
-                        bookinglength += OneDay;
+                        startdate = startdate.AddDays(1);
                     }
-                    startdate = startdate.AddDays(1);
-
                 }
-                else
+                var room = _roomrepository.GetByGuid(bookings.RoomGuid);
+                var bookinglengthdto = new BookingDto()
                 {
-                    startdate = startdate.AddDays(1);
-                }
+                    RoomGuid = bookings.RoomGuid,
+                    RoomName = room.Name,
+                    BookingLength = bookinglength.TotalHours
+                };
+                bookinglist.Add(bookinglengthdto);
             }
-            
-            
-            return new BookingDto
-            {
-                RoomGuid = getbooking.RoomGuid,
-                RoomName = getroom.Name,
-                BookingLength = bookinglength.TotalHours
-            };
+            return bookinglist;
         }
 
     }

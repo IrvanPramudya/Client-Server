@@ -142,10 +142,10 @@ namespace API.Controllers
                 Data = result
             });
         }
-        [HttpPost("BookingLength")]
-        public IActionResult BookingLength(BookingLengthDto bookingDto)
+        [HttpGet("BookingLength")]
+        public IActionResult BookingLength()
         {
-            var data = _booking.BookingLength(bookingDto);
+            var data = _booking.BookingLength();
             if(data is null)
             {
                 return NotFound(new ResponseHandler<GetViewBookingDto>
@@ -156,7 +156,7 @@ namespace API.Controllers
                     Data = null
                 });
             }
-            return Ok(new ResponseHandler<BookingDto>
+            return Ok(new ResponseHandler<IEnumerable<BookingDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
