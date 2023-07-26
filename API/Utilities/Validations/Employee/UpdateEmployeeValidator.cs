@@ -11,9 +11,6 @@ namespace API.Utilities.Validations.Employee
         public UpdateEmployeeValidator(IEmployeeRepository repository)
         {
             _repository = repository;
-            RuleFor(employee => employee.Nik)
-                .NotEmpty().WithMessage("NIK is Required")
-                .MaximumLength(6).WithMessage("Maximum 6 Character");
             RuleFor(employee => employee.FirstName)
                 .NotEmpty().WithMessage("First Name is Required");
             RuleFor(employee => employee.BirthDate)
@@ -26,18 +23,30 @@ namespace API.Utilities.Validations.Employee
             RuleFor(employee => employee.Email)
                 .NotEmpty().WithMessage("Email is Required")
                 .EmailAddress().WithMessage("Wrong Email")
-                .Must(IsDuplicateValue).WithMessage("Email is Already Exist");
+                .Must((e,g)=> IsDuplicateValue(e.Email,e.Guid)).WithMessage("Email is Already Exist");
             RuleFor(employee => employee.PhoneNumber)
                 .NotEmpty().WithMessage("Phone Number is Required")
                 .MaximumLength(20).WithMessage("Maximum 20 Character")
                 .Matches(@"^\+[0-9]")
-                .Must(IsDuplicateValue).WithMessage("Phone is Already Exist");
+                .Must((e, g) => IsDuplicateValue(e.PhoneNumber, e.Guid)).WithMessage("Phone is Already Exist");
 
         }
 
-        private bool IsDuplicateValue(string arg)
+        private bool IsDuplicateValue(string arg,Guid guid)
         {
-            return _repository.IsNotExist(arg);
+            var temp = false;
+            var (email,phone) = GetEmail(guid);
+            if(arg == email||arg== phone) 
+            { 
+                temp = true; 
+            }
+            var result = _repository.IsNotExist(arg) || temp;
+            return result;
+        }
+        private (string email, string phone) GetEmail(Guid guid)
+        {
+            var data = _repository.GetByGuid(guid);
+            return (data.Email, data.PhoneNumber);
         }
     }
 }

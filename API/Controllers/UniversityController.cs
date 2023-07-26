@@ -1,6 +1,9 @@
-﻿using API.DTOs.Universities;
+﻿using API.DTOs.Accounts;
+using API.DTOs.Universities;
 using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -21,9 +24,21 @@ namespace API.Controllers
             var result = _service.GetAll();
             if (!result.Any())
             {
-                return NotFound("Data Not Found");
+                return NotFound(new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Guid Is Not Found",
+                    Data = null
+                });
             }
-            return Ok(result);
+            return Ok(new ResponseHandler<IEnumerable<UniversityDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = result
+            });
         }
         [HttpGet("{guid}")]
         public IActionResult GetByGuid(Guid guid)
@@ -31,9 +46,21 @@ namespace API.Controllers
             var result = _service.GetByGuid(guid);
             if (result is null)
             {
-                return NotFound("Guid Not Found");
+                return NotFound(new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Guid Is Not Found",
+                    Data = null
+                });
             }
-            return Ok(result);
+            return Ok(new ResponseHandler<UniversityDto>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Founded",
+                Data = result
+            });
         }
         /*public IActionResult GetByName(string name)
         {
@@ -51,9 +78,21 @@ namespace API.Controllers
             var result = _service.Create(newUniversityDto);
             if(result is null)
             {
-                return StatusCode(500, "Error Rerieve to Database");
+                return StatusCode(500, new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Internal Server Error",
+                    Data = null
+                });
             }
-            return Ok("Data Added");
+            return Ok(new ResponseHandler<UniversityDto>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Added",
+                Data = result
+            });
         }
         [HttpPut]
         public IActionResult Update(UniversityDto universityDto)
@@ -61,13 +100,31 @@ namespace API.Controllers
             var result = _service.Update(universityDto);
             if(result == 0)
             {
-                return StatusCode(500, "Error Rerieve to Database");
+                return StatusCode(500, new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Internal Server Error",
+                    Data = null
+                });
             }
             if(result == -1)
             {
-                return NotFound("Guid Not Found");
+                return NotFound(new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Guid Is Not Found",
+                    Data = null
+                });
             }
-            return Ok("Update Success");
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Updated",
+                Data = result
+            });
         }
         [HttpDelete]
         public IActionResult Delete(Guid guid)
@@ -75,13 +132,31 @@ namespace API.Controllers
             var result = _service.Delete(guid);
             if (result == 0)
             {
-                return StatusCode(500, "Error Rerieve to Database");
+                return StatusCode(500, new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Internal Server Error",
+                    Data = null
+                });
             }
             if (result == -1)
             {
-                return NotFound("Guid Not Found");
+                return NotFound(new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Guid Is Not Found",
+                    Data = null
+                });
             }
-            return Ok("Delete Success");
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Deleted",
+                Data = result
+            });
         }
     }
 }

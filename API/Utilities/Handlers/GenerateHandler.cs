@@ -8,7 +8,7 @@ namespace API.Utilities.Handlers
 
         public static string LastNik(string nik)
         {
-            string defaultNIK = "000000";
+            string defaultNIK = "111111";
             if(nik == null)
             {
                 return defaultNIK;

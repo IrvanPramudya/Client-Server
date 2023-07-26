@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Accounts;
 using API.DTOs.Employees;
 using API.Models;
 using API.Utilities.Handlers;
@@ -13,28 +14,28 @@ namespace API.Services
         {
             _repository = repository;
         }
-        public IEnumerable<GetViewEmployeeDto> GetAll()
+        public IEnumerable<GetAllEmployeeDto> GetAll()
         {
             var data = _repository.GetAll();
             if(data == null)
             {
-                return Enumerable.Empty<GetViewEmployeeDto>();
+                return Enumerable.Empty<GetAllEmployeeDto>();
             }
-            var bookinglist = new List<GetViewEmployeeDto>();
-            foreach (var booking in data)
+            var employeelist = new List<GetAllEmployeeDto>();
+            foreach (var employee in data)
             {
-                bookinglist.Add((GetViewEmployeeDto)booking);
+                employeelist.Add((GetAllEmployeeDto)employee);
             }
-            return bookinglist;
+            return employeelist;
         }
-        public GetViewEmployeeDto? GetByGuid(Guid guid)
+        public GetAllEmployeeDto? GetByGuid(Guid guid)
         {
             var data = _repository.GetByGuid(guid);
             if(data == null)
             {
                 return null;
             }
-            return (GetViewEmployeeDto)data;
+            return (GetAllEmployeeDto)data;
         }
         public GetViewEmployeeDto? Create(InsertEmployeeDto dto)
         {
@@ -56,7 +57,8 @@ namespace API.Services
             }
             Employee toupdate = dto;
             toupdate.CreatedDate = data.CreatedDate;
-            var result = _repository.Update(dto);
+            toupdate.Nik = _repository.GetByGuid(dto.Guid).Nik;
+            var result = _repository.Update(toupdate);
             return result ? 1 : 0;
         }
         public int Delete(Guid guid)
