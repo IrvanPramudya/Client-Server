@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Bookings;
+using API.DTOs.Rooms;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
@@ -139,6 +140,28 @@ namespace API.Controllers
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Data Success Deleted",
                 Data = result
+            });
+        }
+        [HttpPost("BookingLength")]
+        public IActionResult BookingLength(BookingLengthDto bookingDto)
+        {
+            var data = _booking.BookingLength(bookingDto);
+            if(data is null)
+            {
+                return NotFound(new ResponseHandler<GetViewBookingDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Guid Is Not Found",
+                    Data = null
+                });
+            }
+            return Ok(new ResponseHandler<BookingDto>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
             });
         }
     }

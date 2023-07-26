@@ -148,5 +148,10 @@ namespace API.Controllers
             });
 
         }
+        /*[HttpGet("isnotused")]
+        public IActionResult GetFreeRoom()
+        {
+
+        }*/
     }
 }

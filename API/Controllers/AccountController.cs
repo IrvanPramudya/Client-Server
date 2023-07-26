@@ -174,7 +174,7 @@ namespace API.Controllers
         public IActionResult Register(RegisterDto register)
         {
             var data = _account.register(register);
-            if(data==0)
+            if(data is null)
             {
                 return StatusCode(500, new ResponseHandler<GetViewAccountDto>
                 {
@@ -184,7 +184,7 @@ namespace API.Controllers
                     Data = null
                 });
             }
-            return Ok(new ResponseHandler<int>
+            return Ok(new ResponseHandler<RegisterDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

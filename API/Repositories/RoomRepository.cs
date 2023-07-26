@@ -11,6 +11,16 @@ namespace API.Repositories
         {
         }
 
+        /*public IEnumerable<Room>? GetRoom(Guid guid)
+        {
+            var data = _context.Set<Room>().Add();
+        }*/
+
+        public Room? GetRoomBooking(Guid guid)
+        {
+            return _context.Set<Room>().Find(guid);
+        }
+
         public bool IsNotExist(string value)
         {
             return _context.Set<Room>()

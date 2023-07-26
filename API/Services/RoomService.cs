@@ -2,12 +2,14 @@
 using API.DTOs.Rooms;
 using API.DTOs.Universities;
 using API.Models;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace API.Services
 {
     public class RoomService
     {
         private readonly IRoomRepository _repository;
+        private readonly IBookingRepository _bookingrepository;
 
         public RoomService(IRoomRepository repository)
         {
@@ -71,5 +73,22 @@ namespace API.Services
             return result ? 1       //Unversity ter Hapus
                             : 0;    //Unversity Gagal ter Hapus
         }
+        /*public RoomDto? GetFreeRoom(FreeRoomDto freeRoomDto)
+        {
+            var data = _bookingrepository.GetStatus(freeRoomDto.Status);
+            if(data is null)
+            {
+                return null;
+            }
+            var freeroomlist = new List<RoomDto>();
+            var getroom = _repository.GetByGuid(data.RoomGuid);
+            *//*foreach (var room in getroom)
+            {
+
+            }
+            
+            return (RoomDto?)getroom;*//*
+        }*/
+
     }
 }
