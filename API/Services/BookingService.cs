@@ -98,21 +98,14 @@ namespace API.Services
                     }
                     if(startdate.TimeOfDay>=Start && enddate.TimeOfDay<=End)
                     {
-                        if(startdate.TimeOfDay == enddate.TimeOfDay)
+                        if(startdate.TimeOfDay == enddate.TimeOfDay && startdate.Date < enddate.Date)
                         {
                             bookinglength += OneDay;
                         }
                         else
                         {
-                            if(startdate.Date<enddate.Date)
-                            {
-                                bookinglength += OneDay;
-                            }
-                            else
-                            {
-                                length = enddate.TimeOfDay - startdate.TimeOfDay;
-                                bookinglength += length;
-                            }
+                            length = enddate.TimeOfDay - startdate.TimeOfDay;
+                            bookinglength += length;
                         }
                     }
                     else
