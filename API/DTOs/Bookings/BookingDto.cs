@@ -4,6 +4,7 @@
     {
         public Guid RoomGuid { get; set; }
         public string RoomName { get; set; }
-        public double BookingLength { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

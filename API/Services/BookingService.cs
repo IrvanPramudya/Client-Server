@@ -72,120 +72,97 @@ namespace API.Services
             var result = _repository.Delete(data);
             return result ? 1 : 0;
         }
-        public IEnumerable<BookingDto?> BookingLength()
+        public IEnumerable<BookingLengthDto?> BookingLength()
         {
-            var bookinglist = new List<BookingDto>();
-            var getbooking = _repository.GetAll();
             TimeSpan length = new TimeSpan();
             TimeSpan Start = new TimeSpan(09, 00, 00);
             TimeSpan End = new TimeSpan(17, 00, 00);
             TimeSpan OneDay = new TimeSpan(08, 00, 00);
-            if (getbooking == null)
+
+            var listbooking = new List<BookingLengthDto>();
+
+            var result = from booking in _repository.GetAll()
+                         join room in _roomrepository.GetAll() on booking.RoomGuid equals room.Guid
+                         select new BookingDto
+                         {
+                                 RoomGuid = booking.RoomGuid,
+                                 RoomName = room.Name,
+                                 StartDate = booking.StartDate,
+                                 EndDate = booking.EndDate
+                         };
+            foreach(var book in result)
             {
-                return null;
-            }
-            foreach(var bookings  in getbooking)
-            {
-                TimeSpan bookinglength = new TimeSpan();
-                var startdate = bookings.StartDate;
-                var enddate = bookings.EndDate;
-                while (startdate < enddate)
+                TimeSpan BookingLength = new TimeSpan();
+                while (book.StartDate < book.EndDate)
                 {
-                    if (startdate.DayOfWeek != DayOfWeek.Sunday && startdate.DayOfWeek != DayOfWeek.Saturday)
+                    if (book.StartDate.DayOfWeek != DayOfWeek.Sunday && book.StartDate.DayOfWeek != DayOfWeek.Saturday)
                     {
-                        if (startdate.TimeOfDay >= Start && enddate.TimeOfDay <= End)
+                        if (book.StartDate.TimeOfDay >= Start && book.EndDate.TimeOfDay <= End)
                         {
-                            if (startdate.TimeOfDay == enddate.TimeOfDay && startdate.Date < enddate.Date)
+                            if (book.StartDate.TimeOfDay == book.EndDate.TimeOfDay && book.StartDate.Date < book.EndDate.Date)
                             {
-                                bookinglength += OneDay;
+                                BookingLength += OneDay;
                             }
                             else
                             {
-                                length = enddate.TimeOfDay - startdate.TimeOfDay;
-                                bookinglength += length;
+                                length = book.EndDate.TimeOfDay - book.StartDate.TimeOfDay;
+                                BookingLength += length;
                             }
                         }
                         else
                         {
-                            bookinglength += OneDay;
+                            BookingLength += OneDay;
                         }
-                        startdate = startdate.AddDays(1);
+                        book.StartDate = book.StartDate.AddDays(1);
                     }
                     else
                     {
-                        startdate = startdate.AddDays(1);
+                        book.StartDate = book.StartDate.AddDays(1);
                     }
                 }
-                var room = _roomrepository.GetByGuid(bookings.RoomGuid);
-                var bookinglengthdto = new BookingDto()
+                var bookinglength = new BookingLengthDto
                 {
-                    RoomGuid = bookings.RoomGuid,
-                    RoomName = room.Name,
-                    BookingLength = bookinglength.TotalHours
+                    RoomGuid = book.RoomGuid,
+                    RoomName = book.RoomName,
+                    BookingLength = BookingLength.TotalHours
                 };
-                bookinglist.Add(bookinglengthdto);
+                listbooking.Add(bookinglength);
             }
-            return bookinglist;
+            return listbooking;
         }
         public IEnumerable<DetailBookingDto> GetDetailBooking()
         {
-            var booking = _repository.GetAll();
-            if(booking is null)
-            {
-                return Enumerable.Empty<DetailBookingDto>();
-            }
-            var listdetailbooking = new List<DetailBookingDto>();
-
-            foreach(var data  in booking)
-            {
-                var employee = _employeerepository.GetByGuid(data.EmployeeGuid);
-                if(employee is null)
-                {
-                    return Enumerable.Empty<DetailBookingDto>();
-                }
-                var room = _roomrepository.GetByGuid(data.RoomGuid);
-                if(room is null)
-                {
-                    return Enumerable.Empty<DetailBookingDto>();
-                }
-                var bookingdetail = new DetailBookingDto
-                {
-                    BookingGuid = data.Guid,
-                    BookedNIK = employee.Nik,
-                    BookedBy = employee.FirstName + " " + employee.LastName,
-                    RoomName = room.Name,
-                    StartDate = data.StartDate,
-                    EndDate = data.EndDate,
-                    Status = data.Status,
-                    Remarks = data.Remarks
-                };
-                listdetailbooking.Add(bookingdetail);
-            }
-            return listdetailbooking;
+            var result = from employee in _employeerepository.GetAll()
+                         join booking in _repository.GetAll() on employee.Guid equals booking.EmployeeGuid
+                         join room in _roomrepository.GetAll() on booking.RoomGuid equals room.Guid
+                         select new DetailBookingDto
+                         {
+                             BookingGuid = booking.Guid,
+                             BookedNIK = employee.Nik,
+                             BookedBy = employee.FirstName + " " + employee.LastName,
+                             RoomName = room.Name,
+                             StartDate = booking.StartDate,
+                             EndDate = booking.EndDate,
+                             Status = booking.Status,
+                             Remarks = booking.Remarks
+                         };
+            return result;
         }
         public IEnumerable<RoomDto> FreeRoomsToday()
         {
-            var roomlist = new List<RoomDto>();
-            var booking = _repository.GetAll();
-            var freebooking = booking.Where(b => b.Status == StatusLevel.Done);
-            var freebookingtoday = freebooking.Where(b => b.EndDate < DateTime.Now);
-            foreach(var data in freebookingtoday)
-            {
-                var room = _roomrepository.GetByGuid(data.RoomGuid);
-                RoomDto newroom = new RoomDto
-                {
-                    Guid = room.Guid,
-                    Capacity = room.Capacity,
-                    Floor = room.Floor,
-                    Name = room.Name
-                };
-                roomlist.Add(newroom);
-            }
-            if(!roomlist.Any())
-            {
-                return null;
-            }
-            return roomlist;
+            var result = from room in _roomrepository.GetAll()
+                         join booking in _repository.GetAll() on  room.Guid equals booking.RoomGuid into books
+                         from freeroom in books
+                         where( freeroom.EndDate < DateTime.Now)
+                         select new RoomDto
+                         {
+                             Guid = room.Guid,
+                             Capacity = room.Capacity,
+                             Floor = room.Floor,
+                             Name = room.Name
+                         };
+            var roomresult = result.DistinctBy(room => room.Guid);
+            return roomresult;
         }
     }
 }

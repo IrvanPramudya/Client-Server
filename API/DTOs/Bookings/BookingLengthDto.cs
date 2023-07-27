@@ -2,6 +2,8 @@
 {
     public class BookingLengthDto
     {
-        public Guid BookingGuid { get; set; }
+        public Guid RoomGuid { get; set; }
+        public string RoomName { get; set; }
+        public double BookingLength { get; set; }
     }
 }

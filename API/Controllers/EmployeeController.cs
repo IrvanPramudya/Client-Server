@@ -188,7 +188,7 @@ namespace API.Controllers
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "Data Success Deleted",
+                Message = "Data Success Retrieved",
                 Data = data
             });
         }

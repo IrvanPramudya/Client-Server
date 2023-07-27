@@ -228,25 +228,8 @@ namespace API.Controllers
         public IActionResult ChangePassword(ChangePasswordDto changePasswordDto)
         {
             var data = _account.ChangePassword(changePasswordDto);
-            if(data == 0)
-            {
-                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "OTP Doesnt Match",
-                });
-            }
-            if(data == 1)
-            {
-                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "OTP Is Used",
-                });
-            }
-            if(data == -1)
+
+            if (data == 0)
             {
                 return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
                 {
@@ -255,7 +238,28 @@ namespace API.Controllers
                     Message = "Email Not Found",
                 });
             }
-            if(data == 2)
+
+            if (data == -1)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP Doesnt Match",
+                });
+            }
+
+            if(data == -2)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP Is Used",
+                });
+            }
+
+            if(data == -3)
             {
                 return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
                 {
@@ -264,11 +268,21 @@ namespace API.Controllers
                     Message = "OTP Is Expired",
                 });
             }
+
+            if(data == -4)
+            {
+                return StatusCode(500, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Update Password Is Failed",
+                });
+            }
             return Ok(new ResponseHandler<int>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "OTP Has been Sent to Your Email",
+                Message = "Update Password Is Success",
                 Data = data
             });
 

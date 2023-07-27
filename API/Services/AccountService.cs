@@ -232,15 +232,13 @@ namespace API.Services
         }
         public int ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
-            var employee = _employeerepository.GetEmail(forgotPasswordDto.Email);
-            if(employee is null)
+            var account = (from employee in _employeerepository.GetAll()
+                                    join accounts in _repository.GetAll() on employee.Guid equals accounts.Guid
+                                    where employee.Email == forgotPasswordDto.Email
+                                    select accounts).FirstOrDefault();
+            if(account == null)
             {
                 return 0;
-            }
-            var account = _repository.GetByGuid(employee.Guid);
-            if(account is null)
-            {
-                return -1;
             }
             var otp = new Random().Next(111111, 999999);
             var updated = _repository.Update(new Account
@@ -257,7 +255,7 @@ namespace API.Services
             {
                 return -1;
             }
-            forgotPasswordDto.Email = $"{otp}";
+
             return 1;
         }
         public int ChangePassword(ChangePasswordDto changePasswordDto)
@@ -265,7 +263,7 @@ namespace API.Services
             var emailcheck = _employeerepository.CheckEmail(changePasswordDto.Email);
             if(emailcheck is null)
             {
-                return -1;
+                return 0;
             }
             var account = _repository.GetByGuid(emailcheck.Guid);
             var newaccount = new Account
@@ -280,22 +278,22 @@ namespace API.Services
             };
             if(account.Otp != changePasswordDto.Otp)
             {
-                return 0;
+                return -1;
             }
-            if(account.IsUsed == true)
+            if(account.IsUsed)
             {
-                return 1;
+                return -2;
             }
             if(account.ExpiredTime<DateTime.Now)
             {
-                return 2;
+                return -3;
             }
             var update = _repository.Update(newaccount);
             if(!update)
             {
-                return 0;
+                return -4;
             }
-            return 3;
+            return 1;
         }
 
     }

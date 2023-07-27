@@ -1,5 +1,4 @@
-﻿
-using API.Contracts;
+﻿using API.Contracts;
 using API.DTOs.Accounts;
 using FluentValidation;
 
@@ -37,7 +36,9 @@ namespace API.Utilities.Validations.Accounts
             RuleFor(education => education.Degree)
                 .NotEmpty().WithMessage("Degree Can Not Null");
             RuleFor(education => education.GPA)
-                .NotEmpty().WithMessage("Gpa Can Not Null");
+                .NotEmpty().WithMessage("Gpa Can Not Null")
+                .LessThanOrEqualTo(4).WithMessage("Maximal GPA is 4")
+                .GreaterThanOrEqualTo(0).WithMessage("Minimun GPA is 0");
             RuleFor(university => university.UniversityName)
                 .NotEmpty().WithMessage("Name can not be Null")
                 .Must(IsDuplicateValueUniversity).WithMessage("Name Already Saved");

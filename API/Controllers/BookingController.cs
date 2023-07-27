@@ -156,7 +156,7 @@ namespace API.Controllers
                     Data = null
                 });
             }
-            return Ok(new ResponseHandler<IEnumerable<BookingDto>>
+            return Ok(new ResponseHandler<IEnumerable<BookingLengthDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
