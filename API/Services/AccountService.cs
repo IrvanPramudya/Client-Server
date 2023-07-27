@@ -5,6 +5,7 @@ using API.DTOs.Employees;
 using API.DTOs.Universities;
 using API.Models;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Services
 {
@@ -116,7 +117,7 @@ namespace API.Services
                 {
                     Guid = employee.Guid,
                     Password = register.Password,
-                    Otp = 111,
+                    Otp = new Random().Next(111111,999999),
                     IsUsed = true,
                     ExpiredTime = DateTime.Now.AddDays(30)
                 };
@@ -176,5 +177,73 @@ namespace API.Services
             }
             
         }
+        public int ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var employee = _employeerepository.GetEmail(forgotPasswordDto.Email);
+            if(employee is null)
+            {
+                return 0;
+            }
+            var account = _repository.GetByGuid(employee.Guid);
+            if(account is null)
+            {
+                return -1;
+            }
+            var otp = new Random().Next(111111, 999999);
+            var updated = _repository.Update(new Account
+            {
+                Guid = account.Guid,
+                Password = account.Password,
+                ExpiredTime = DateTime.Now.AddMinutes(5),
+                Otp = otp,
+                IsUsed = false,
+                CreatedDate = account.CreatedDate,
+                ModifiedDate = DateTime.Now
+            });
+            if(!updated)
+            {
+                return -1;
+            }
+            forgotPasswordDto.Email = $"{otp}";
+            return 1;
+        }
+        public int ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var emailcheck = _employeerepository.CheckEmail(changePasswordDto.Email);
+            if(emailcheck is null)
+            {
+                return -1;
+            }
+            var account = _repository.GetByGuid(emailcheck.Guid);
+            var newaccount = new Account
+            {
+                Guid = account.Guid,
+                IsUsed = true,
+                Password = changePasswordDto.NewPassword,
+                Otp = account.Otp,
+                ExpiredTime = account.ExpiredTime,
+                CreatedDate = account.CreatedDate,
+                ModifiedDate = DateTime.Now
+            };
+            if(account.Otp != changePasswordDto.Otp)
+            {
+                return 0;
+            }
+            if(account.IsUsed == true)
+            {
+                return 1;
+            }
+            if(account.ExpiredTime<DateTime.Now)
+            {
+                return 2;
+            }
+            var update = _repository.Update(newaccount);
+            if(!update)
+            {
+                return 0;
+            }
+            return 3;
+        }
+
     }
 }

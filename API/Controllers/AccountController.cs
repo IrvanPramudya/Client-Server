@@ -170,7 +170,7 @@ namespace API.Controllers
             });
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public IActionResult Register(RegisterDto register)
         {
             var data = _account.register(register);
@@ -191,6 +191,87 @@ namespace API.Controllers
                 Message = "Successfull Register",
                 Data = data
             });
+        }
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var data = _account.ForgotPassword(forgotPasswordDto);
+            if(data == 0)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email Not Found",
+                    Data = null
+                });
+            }
+            if(data == -1)
+            {
+                return StatusCode(500, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Error Retrieving Data From Database",
+                    Data = null
+                });
+            }
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "OTP Has been Sent to Your Email",
+                Data = data
+            });
+        }
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var data = _account.ChangePassword(changePasswordDto);
+            if(data == 0)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP Doesnt Match",
+                });
+            }
+            if(data == 1)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP Is Used",
+                });
+            }
+            if(data == -1)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email Not Found",
+                });
+            }
+            if(data == 2)
+            {
+                return StatusCode(404, new ResponseHandler<ForgotPasswordDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP Is Expired",
+                });
+            }
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "OTP Has been Sent to Your Email",
+                Data = data
+            });
+
         }
     }
 }
