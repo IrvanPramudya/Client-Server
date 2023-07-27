@@ -7,5 +7,6 @@ namespace API.Contracts
         IEnumerable<University> GetByName(string name);
 
         bool IsNotExist(string value);
+        University? GetByCode(string code);
     }
 }

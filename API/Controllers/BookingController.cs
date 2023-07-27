@@ -164,5 +164,28 @@ namespace API.Controllers
                 Data = data
             });
         }
+        [HttpGet("DetailBooking")]
+        public IActionResult GetDetailBooking()
+        {
+            var data = _booking.GetDetailBooking();
+            if(data is null)
+            {
+                return NotFound(new ResponseHandler<GetViewBookingDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Is Empty"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<DetailBookingDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+
+        }
     }
 }

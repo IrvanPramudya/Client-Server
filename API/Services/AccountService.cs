@@ -94,6 +94,11 @@ namespace API.Services
         }
         public RegisterDto? register(RegisterDto register)
         {
+            if(!_employeerepository.IsNotExist(register.Email)
+                ||!_employeerepository.IsNotExist(register.PhoneNumber))
+            {
+                return null;
+            }
            try
             {
                 
@@ -126,50 +131,98 @@ namespace API.Services
                 {
                     return null;
                 }
+                var getuniversitycode = _universityrepository.GetByCode(register.UniversityCode);
+                if(getuniversitycode is null )
+                {
+                    University university = new NewUniversityDto
+                    {
+                        Code = register.UniversityCode,
+                        Name = register.UniversityName,
+                    };
+                    Education education = new InsertEducationDto
+                    {
+                        Guid = employee.Guid,
+                        Degree = register.Degree,
+                        Major = register.Major,
+                        Gpa = register.GPA,
+                        UniversityGuid = university.Guid,
+                    };
 
-                University university = new NewUniversityDto
-                {
-                    Code = register.UniversityCode,
-                    Name = register.UniversityName,
-                };
-                var createuniversity = _universityrepository.Create(university);
-                if(createuniversity is null )
-                {
-                    return null;
+                    var createuniversity = _universityrepository.Create(university);
+                    if (createuniversity is null)
+                    {
+                        return null;
+                    }
+                    var createeducation = _educationrepository.Create(education);
+                    if (createeducation is null)
+                    {
+                        return null;
+                    }
+                    return new RegisterDto
+                    {
+                        FirstName = createemployee.FirstName,
+                        LastName = createemployee.LastName,
+                        Email = createemployee.Email,
+                        PhoneNumber = createemployee.PhoneNumber,
+                        BirthDate = createemployee.BirthDate,
+                        HiringDate = createemployee.HiringDate,
+                        Gender = createemployee.Gender,
+                        Degree = createeducation.Degree,
+                        Major = createeducation.Major,
+                        GPA = createeducation.Gpa,
+                        UniversityCode = createuniversity.Code,
+                        UniversityName = createuniversity.Name,
+                        Password = createaccount.Password,
+                    };
                 }
+                else
+                {
+                    University university = new University
+                    {
+                        Guid = getuniversitycode.Guid,
+                        Code = getuniversitycode.Code,
+                        Name = getuniversitycode.Name,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                    };
+                    Education education = new InsertEducationDto
+                    {
+                        Guid = employee.Guid,
+                        Degree = register.Degree,
+                        Major = register.Major,
+                        Gpa = register.GPA,
+                        UniversityGuid = university.Guid,
+                    };
 
-                Education education = new InsertEducationDto
-                {
-                    Guid = employee.Guid,
-                    Degree = register.Degree,
-                    Major = register.Major,
-                    Gpa = register.GPA,
-                    UniversityGuid = university.Guid,
-                };
-                
-                var createeducation = _educationrepository.Create(education);
-                if(createeducation is null)
-                {
-                    return null;
+                    var createuniversity = _universityrepository.Create(university);
+                    if (createuniversity is null)
+                    {
+                        return null;
+                    }
+                    var createeducation = _educationrepository.Create(education);
+                    if (createeducation is null)
+                    {
+                        return null;
+                    }
+
+                    return new RegisterDto
+                    {
+                        FirstName = createemployee.FirstName,
+                        LastName = createemployee.LastName,
+                        Email = createemployee.Email,
+                        PhoneNumber = createemployee.PhoneNumber,
+                        BirthDate = createemployee.BirthDate,
+                        HiringDate = createemployee.HiringDate,
+                        Gender = createemployee.Gender,
+                        Degree = createeducation.Degree,
+                        Major = createeducation.Major,
+                        GPA = createeducation.Gpa,
+                        UniversityCode = createuniversity.Code,
+                        UniversityName = createuniversity.Name,
+                        Password = createaccount.Password,
+                    };
                 }
                 
-
-                return new RegisterDto
-                {
-                    FirstName = createemployee.FirstName,
-                    LastName = createemployee.LastName,
-                    Email = createemployee.Email,
-                    PhoneNumber = createemployee.PhoneNumber,
-                    BirthDate = createemployee.BirthDate,
-                    HiringDate = createemployee.HiringDate,
-                    Gender = createemployee.Gender,
-                    Degree = createeducation.Degree,
-                    Major = createeducation.Major,
-                    GPA = createeducation.Gpa,
-                    UniversityCode = createuniversity.Code,
-                    UniversityName = createuniversity.Name,
-                    Password = createaccount.Password,
-                };
             }
             catch
             {

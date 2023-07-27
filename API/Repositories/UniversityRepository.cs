@@ -11,6 +11,11 @@ namespace API.Repositories
         {
         }
 
+        public University? GetByCode(string code)
+        {
+            return _context.Set<University>().SingleOrDefault(u=> u.Code == code);
+        }
+
         public IEnumerable<University> GetByName(string name)
         {
             return _context.Set<University>().Where(university => university.Name.Contains(name)).ToList();

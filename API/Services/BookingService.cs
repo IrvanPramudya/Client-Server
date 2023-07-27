@@ -9,11 +9,13 @@ namespace API.Services
     {
         private readonly IBookingRepository _repository;
         private readonly IRoomRepository _roomrepository;
+        private readonly IEmployeeRepository _employeerepository;
 
-        public BookingService(IBookingRepository repository, IRoomRepository roomrepository)
+        public BookingService(IBookingRepository repository, IRoomRepository roomrepository, IEmployeeRepository employeerepository)
         {
             _repository = repository;
             _roomrepository = roomrepository;
+            _employeerepository = employeerepository;
         }
         public IEnumerable<GetViewBookingDto> GetAll()
         {
@@ -123,6 +125,42 @@ namespace API.Services
                 bookinglist.Add(bookinglengthdto);
             }
             return bookinglist;
+        }
+        public IEnumerable<DetailBookingDto> GetDetailBooking()
+        {
+            var booking = _repository.GetAll();
+            if(booking is null)
+            {
+                return Enumerable.Empty<DetailBookingDto>();
+            }
+            var listdetailbooking = new List<DetailBookingDto>();
+
+            foreach(var data  in booking)
+            {
+                var employee = _employeerepository.GetByGuid(data.EmployeeGuid);
+                if(employee is null)
+                {
+                    return Enumerable.Empty<DetailBookingDto>();
+                }
+                var room = _roomrepository.GetByGuid(data.RoomGuid);
+                if(room is null)
+                {
+                    return Enumerable.Empty<DetailBookingDto>();
+                }
+                var bookingdetail = new DetailBookingDto
+                {
+                    BookingGuid = data.Guid,
+                    BookedNIK = employee.Nik,
+                    BookedBy = employee.FirstName + " " + employee.LastName,
+                    RoomName = room.Name,
+                    StartDate = data.StartDate,
+                    EndDate = data.EndDate,
+                    Status = data.Status,
+                    Remarks = data.Remarks
+                };
+                listdetailbooking.Add(bookingdetail);
+            }
+            return listdetailbooking;
         }
 
     }
