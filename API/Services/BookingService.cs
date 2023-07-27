@@ -2,6 +2,7 @@
 using API.DTOs.Bookings;
 using API.DTOs.Rooms;
 using API.Models;
+using API.Utilities.Enums;
 
 namespace API.Services
 {
@@ -162,6 +163,29 @@ namespace API.Services
             }
             return listdetailbooking;
         }
-
+        public IEnumerable<RoomDto> FreeRoomsToday()
+        {
+            var roomlist = new List<RoomDto>();
+            var booking = _repository.GetAll();
+            var freebooking = booking.Where(b => b.Status == StatusLevel.Done);
+            var freebookingtoday = freebooking.Where(b => b.EndDate < DateTime.Now);
+            foreach(var data in freebookingtoday)
+            {
+                var room = _roomrepository.GetByGuid(data.RoomGuid);
+                RoomDto newroom = new RoomDto
+                {
+                    Guid = room.Guid,
+                    Capacity = room.Capacity,
+                    Floor = room.Floor,
+                    Name = room.Name
+                };
+                roomlist.Add(newroom);
+            }
+            if(!roomlist.Any())
+            {
+                return null;
+            }
+            return roomlist;
+        }
     }
 }

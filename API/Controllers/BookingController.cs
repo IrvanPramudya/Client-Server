@@ -187,5 +187,26 @@ namespace API.Controllers
             });
 
         }
+        [HttpGet("FreeRoomToday")]
+        public IActionResult FreeRoomToday()
+        {
+            var data = _booking.FreeRoomsToday();
+            if(data == null)
+            {
+                return NotFound(new ResponseHandler<GetViewBookingDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Is Empty"
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<RoomDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
     }
 }
