@@ -7,5 +7,6 @@
         Table? Create(Table entity);
         bool Update(Table entity);
         bool Delete(Table entity);
+        void Clear();
     }
 }

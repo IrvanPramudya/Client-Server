@@ -236,6 +236,7 @@ namespace API.Services
                                     join accounts in _repository.GetAll() on employee.Guid equals accounts.Guid
                                     where employee.Email == forgotPasswordDto.Email
                                     select accounts).FirstOrDefault();
+            _repository.Clear();
             if(account == null)
             {
                 return 0;
