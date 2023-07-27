@@ -153,5 +153,27 @@ namespace API.Controllers
         {
 
         }*/
+        [HttpGet("BookedRoom")]
+        public IActionResult GetBookedRoom()
+        {
+            var data = _service.GetRoom();
+            if(data == null)
+            {
+                return NotFound(new ResponseHandler<RoomDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Is Not Found",
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<BookedRoomDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
     }
 }
