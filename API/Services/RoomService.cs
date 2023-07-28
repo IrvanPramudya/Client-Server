@@ -95,28 +95,19 @@ namespace API.Services
         public IEnumerable<BookedRoomDto> GetRoom()
         {
             var today = DateTime.Now.Date;
-            var book = _bookingrepository.GetAll().Where(b => b.StartDate.Date == today);
-            if(!book.Any())
-            {
-                return Enumerable.Empty<BookedRoomDto>();
-            }
-            var booktoday = new List<BookedRoomDto>();
-            foreach(var booking in book)
-            {
-                var employee = _employeerepository.GetByGuid(booking.EmployeeGuid);
-                var room = _repository.GetByGuid(booking.RoomGuid);
-
-                BookedRoomDto bookedroom = new BookedRoomDto
-                {
-                    BookingGuid = booking.Guid,
-                    RoomName = room.Name,
-                    Status = booking.Status,
-                    Floor = room.Floor,
-                    BookedBy = employee.FirstName + " " + employee.LastName
-                };
-                booktoday.Add(bookedroom);
-            }
-            return booktoday;
+            var result = from booking in _bookingrepository.GetAll()
+                         join employee in _employeerepository.GetAll() on booking.EmployeeGuid equals employee.Guid
+                         join room in _repository.GetAll() on booking.RoomGuid equals room.Guid
+                         where (booking.StartDate > today)
+                         select new BookedRoomDto
+                         {
+                             BookingGuid = booking.Guid,
+                             RoomName = room.Name,
+                             Status = booking.Status,
+                             Floor = room.Floor,
+                             BookedBy = employee.FirstName + " " + employee.LastName
+                         };
+            return result;
         }
         
     }

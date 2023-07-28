@@ -10,7 +10,8 @@ namespace API.Utilities.Validations.Accounts
         {
             RuleFor(account => account.Password)
                 .NotEmpty().WithMessage("Password can not be Null")
-                .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+                .WithMessage("Password Must Contain 1 Lower Case, 1 Upper Case, 1 Number, 1 Symbol, and Minimal 8 Characters");
             RuleFor(account => account.Otp)
                 .NotEmpty().WithMessage("OTP can not be Null");
             RuleFor(account =>account.ExpiredTime)

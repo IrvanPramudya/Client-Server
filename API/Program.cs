@@ -2,15 +2,35 @@ using API.Contracts;
 using API.Data;
 using API.Repositories;
 using API.Services;
+using API.Utilities.Handlers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = _context =>
+                    {
+                        var errors = _context.ModelState.Values
+                                             .SelectMany(v => v.Errors)
+                                             .Select(v => v.ErrorMessage);
+
+                        return new BadRequestObjectResult(new ResponseValidationHandler
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Status = HttpStatusCode.BadRequest.ToString(),
+                            Message = "Validation Error",
+                            Errors = errors.ToArray()
+                        });
+                    };
+                });
 // Add services to the container.
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<BookingDbContext>(option => option.UseSqlServer(connection));
@@ -34,6 +54,13 @@ builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccountRoleService>();
 builder.Services.AddScoped<EmployeeService>();
+
+// Add SmtpClient to the container.
+builder.Services.AddTransient<IEmailHandler, EmailHandler>(_ => new EmailHandler(
+    builder.Configuration["EmailService:SmtpServer"],
+    int.Parse(builder.Configuration["EmailService:SmtpPort"]),
+    builder.Configuration["EmailService:FromEmailAddress"]
+));
 
 //Register Fluent Validation
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

@@ -151,7 +151,7 @@ namespace API.Controllers
         public IActionResult Login(LoginAccountDto login)
         {
             var data = _account.Login(login);
-            if(data == 0)
+            if(data == 1)
             {
                 return StatusCode(404, new ResponseHandler<GetViewAccountDto>
                 {
@@ -174,17 +174,25 @@ namespace API.Controllers
         public IActionResult Register(RegisterDto register)
         {
             var data = _account.register(register);
-            if(data is null)
+            if(data == -1)
             {
                 return StatusCode(500, new ResponseHandler<GetViewAccountDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
                     Message = "Register Failed",
-                    Data = null
                 });
             }
-            return Ok(new ResponseHandler<RegisterDto>
+            if(data == 0)
+            {
+                return StatusCode(404, new ResponseHandler<GetViewAccountDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email or Phone Number Already Used",
+                });
+            }
+            return Ok(new ResponseHandler<int>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

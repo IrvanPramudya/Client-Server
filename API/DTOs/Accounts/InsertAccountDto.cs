@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Utilities.Handlers;
 
 namespace API.DTOs.Accounts
 {
@@ -16,7 +17,7 @@ namespace API.DTOs.Accounts
             {
                 Guid            = dto.Guid,
                 Otp             = dto.Otp,
-                Password        = dto.Password,
+                Password        = HashingHandler.GenerateHash(dto.Password),
                 IsUsed          = dto.IsUsed,
                 ExpiredTime     = dto.ExpiredTime,
                 CreatedDate     = DateTime.Now,

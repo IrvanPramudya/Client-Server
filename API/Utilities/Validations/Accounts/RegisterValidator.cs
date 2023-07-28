@@ -40,23 +40,17 @@ namespace API.Utilities.Validations.Accounts
                 .LessThanOrEqualTo(4).WithMessage("Maximal GPA is 4")
                 .GreaterThanOrEqualTo(0).WithMessage("Minimun GPA is 0");
             RuleFor(university => university.UniversityName)
-                .NotEmpty().WithMessage("Name can not be Null")
-                .Must(IsDuplicateValueUniversity).WithMessage("Name Already Saved");
+                .NotEmpty().WithMessage("Name can not be Null");
             RuleFor(university => university.UniversityCode)
-                .NotEmpty().WithMessage("Code can not be Null")
-                .Must(IsDuplicateValueUniversity).WithMessage("Code Already Saved");
+                .NotEmpty().WithMessage("Code can not be Null");
             RuleFor(account => account.Password)
                 .NotEmpty().WithMessage("Password can not be Null")
-                .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+                .WithMessage("Password Must Contain 1 Lower Case, 1 Upper Case, 1 Number, 1 Symbol, and Minimal 8 Characters");
             RuleFor(account => account.ConfirmPassword)
                 .NotEmpty().WithMessage("Confirm Password can not be Null")
                 .Equal(account => account.Password).WithMessage("Password Doesnt Match");
             
-        }
-
-        private bool IsDuplicateValueUniversity(string arg)
-        {
-            return _universityRepository.IsNotExist(arg);
         }
 
         private bool IsDuplicateValue(string arg)
