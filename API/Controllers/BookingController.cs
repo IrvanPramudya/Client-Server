@@ -2,6 +2,7 @@
 using API.DTOs.Rooms;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,6 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("/api/booking")]
+    [Authorize(Roles = "Manager,Admin")]
     public class BookingController: ControllerBase
     {
         private readonly BookingService _booking;

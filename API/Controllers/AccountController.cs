@@ -1,6 +1,7 @@
 ﻿using API.DTOs.Accounts;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -8,6 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("/api/account")]
+    [Authorize]
     public class AccountController: ControllerBase
     {
         private readonly AccountService _account;
@@ -62,6 +64,7 @@ namespace API.Controllers
             });
         }
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Create(InsertAccountDto account)
         {
             var result = _account.Create(account);
@@ -148,12 +151,13 @@ namespace API.Controllers
             });
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login(LoginAccountDto login)
         {
             var data = _account.Login(login);
-            if(data == 1)
+            if (data == "0")
             {
-                return StatusCode(404, new ResponseHandler<GetViewAccountDto>
+                return StatusCode(404, new ResponseHandler<TokenDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -161,15 +165,27 @@ namespace API.Controllers
                     Data = null
                 });
             }
-            return Ok(new ResponseHandler<int>
+            if(data == "-1")
+            {
+                return StatusCode(500, new ResponseHandler<TokenDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Error Generating Token",
+                });
+            }
+            return Ok(new ResponseHandler<object>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Successfull Login",
-                Data = data
+                Data = new TokenDto
+                {
+                    Token = data
+                }
             });
         }
-
+        [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(RegisterDto register)
         {
@@ -200,6 +216,7 @@ namespace API.Controllers
                 Data = data
             });
         }
+        [AllowAnonymous]
         [HttpPost("ForgotPassword")]
         public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
@@ -232,6 +249,7 @@ namespace API.Controllers
                 Data = data
             });
         }
+        [AllowAnonymous]
         [HttpPost("ChangePassword")]
         public IActionResult ChangePassword(ChangePasswordDto changePasswordDto)
         {

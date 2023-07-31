@@ -1,4 +1,6 @@
-﻿using API.Models;
+﻿using API.DTOs.AccountRoles;
+using API.DTOs.Roles;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -21,6 +23,21 @@ namespace API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Role>().HasData (new InsertRoleDefaultDto
+                                                {
+                                                    Guid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
+                                                    Name = "Employee"
+                                                },
+                                                new InsertRoleDefaultDto
+                                                {
+                                                    Guid = Guid.Parse("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
+                                                    Name = "Manager"
+                                                },
+                                                new InsertRoleDefaultDto
+                                                {
+                                                    Guid = Guid.Parse("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
+                                                    Name = "Admin"
+                                                });
             modelBuilder.Entity<Employee>().HasIndex(e => new
             {
                 e.Nik,

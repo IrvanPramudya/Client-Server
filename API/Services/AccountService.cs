@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.DTOs.Educations;
 using API.DTOs.Employees;
@@ -8,6 +9,7 @@ using API.Models;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Services
 {
@@ -19,13 +21,17 @@ namespace API.Services
         private readonly IUniversityRepository _universityrepository;
         private readonly BookingDbContext _dbContext;
         private readonly IEmailHandler _emailHandler;
+        private readonly ITokenHandler _tokenHandler;
+        private readonly IAccountRoleRepository _accountrolerepository;
 
         public AccountService(IAccountRepository repository,
                               IEmployeeRepository employeerepository,
                               IUniversityRepository universityrepository,
                               IEducationRepository educationrepository,
                               BookingDbContext dbContext,
-                              IEmailHandler emailHandler)
+                              IEmailHandler emailHandler,
+                              ITokenHandler tokenHandler,
+                              IAccountRoleRepository accountrolerepository)
         {
             _repository = repository;
             _employeerepository = employeerepository;
@@ -33,6 +39,8 @@ namespace API.Services
             _educationrepository = educationrepository;
             _dbContext = dbContext;
             _emailHandler = emailHandler;
+            _tokenHandler = tokenHandler;
+            _accountrolerepository = accountrolerepository;
         }
         public IEnumerable<GetViewAccountDto> GetAll()
         {
@@ -89,11 +97,12 @@ namespace API.Services
             return result ? 1 : 0;
         }
 
-        public int Login(LoginAccountDto login)
+        public string Login(LoginAccountDto login)
         {
             var result = from employee in _employeerepository.GetAll()
                          join account in _repository.GetAll() on employee.Guid equals account.Guid
-                         where employee.Email == login.Email && HashingHandler.ValidateHash(login.Password, account.Password)
+                         where employee.Email == login.Email && 
+                         HashingHandler.ValidateHash(login.Password, account.Password)
                          select new LoginAccountDto
                          {
                              Email = employee.Email,
@@ -101,9 +110,26 @@ namespace API.Services
                          };
             if(!result.Any())
             {
-                return 0;
+                return "0";
             }
-            return 1;
+            var employees = _employeerepository.GetEmail(login.Email);
+            var getroles = _accountrolerepository.GetRolesNameByAccountGuid(employees.Guid);
+            var claims = new List<Claim>
+            {
+                new Claim("Guid",employees.Guid.ToString()),
+                new Claim("FullName",employees.FirstName + " " + employees.LastName),
+                new Claim("Email",employees.Email)
+            };
+            foreach(var role in getroles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            var generatortoken = _tokenHandler.GenerateToken(claims);
+            if(generatortoken == null)
+            {
+                return "-1";
+            }
+            return generatortoken;
         }
         public int register(RegisterDto register)
         {
@@ -136,7 +162,9 @@ namespace API.Services
                     PhoneNumber = register.PhoneNumber,
                     BirthDate = register.BirthDate,
                     HiringDate = register.HiringDate,
-                    Gender = register.Gender
+                    Gender = register.Gender,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
                 });
                 var education = _educationrepository.Create(new InsertEducationDto
                 {
@@ -146,13 +174,20 @@ namespace API.Services
                     Gpa = register.GPA,
                     UniversityGuid = getuniversitycode.Guid,
                 });
-                var account = _repository.Create(new InsertAccountDto
+                var account = _repository.Create(new Account
                 {
                     Guid = employee.Guid,
                     Password = HashingHandler.GenerateHash(register.Password),
                     Otp = new Random().Next(111111,999999),
                     IsUsed = true,
-                    ExpiredTime = DateTime.Now.AddMinutes(5)
+                    ExpiredTime = DateTime.Now.AddMinutes(5),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                });
+                var accountrole = _accountrolerepository.Create(new InsertAccountRoleDto
+                {
+                    AccountGuid = account.Guid,
+                    RoleGuid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9")
                 });
                 transaction.Commit();
                 return 1;
