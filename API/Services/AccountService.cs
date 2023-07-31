@@ -184,7 +184,18 @@ namespace API.Services
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 });
-                var accountrole = _accountrolerepository.Create(new InsertAccountRoleDto
+                var accountrole = _accountrolerepository.GetAll();
+                if(!accountrole.Any())// Jika Account Role Kosong maka Inputan Register pertama akan menjadi Admin
+                {
+                    var accountroleadmin = _accountrolerepository.Create(new InsertAccountRoleDto
+                    {
+                        AccountGuid = account.Guid,
+                        RoleGuid = Guid.Parse("c0689b0a-5c87-46f1-ce19-08db91a71ab9")
+                    });
+                    transaction.Commit();
+                    return 1;
+                }
+                var accountroleemployee = _accountrolerepository.Create(new InsertAccountRoleDto
                 {
                     AccountGuid = account.Guid,
                     RoleGuid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9")

@@ -31,7 +31,7 @@ namespace API.Repositories
 
         string? IEmployeeRepository.GetLastNik()
         {
-            var data = _context.Set<Employee>().OrderByDescending(e=>e.CreatedDate).FirstOrDefault().Nik;
+            var data = _context.Set<Employee>().ToList().LastOrDefault()?.Nik;
             return data;
         }
 
