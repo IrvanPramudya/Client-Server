@@ -1,0 +1,177 @@
+﻿@{
+    ViewData["Title"] = "Latihan JavaScript";
+    Layout = "_AdminLayout2";
+
+}
+
+<div class="container border border-dark">
+    <div class="row">
+        <div class="col align-content-center" id="k">
+            <h3>List Of Star Wars People Name</h3>
+            <ul id="listSW" class="border border-dark" ></ul>
+        </div>
+        <div class="col">
+            <div class="row border border-warning"  style="height:50%;">
+                <div class="col" id="kalimat" style="margin:auto;">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quisquam isto nemo laborum laudantium eaque ea, facilis id, accusantium sed neque dolorem fugiat illum tenetur ab, aspernatur illo modi aut.
+                </div>
+            </div>
+            <div class="row border border-warning" id="warna" style="height:50%;">
+                <div class="col" style="margin:auto;">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quisquam iusto nemo laborum laudantium eaque ea, facilis id, accusantium sed neque dolorem fugiat illum tenetur ab, aspernatur illo modi aut.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-3 mb-3">
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-3">
+            <button class="tombol">Ubah Warna</button>
+            <button class="tombol2">Ubah Kalimat</button>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>
+<table class="table table-bordered border-dark">
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Height</th>
+            <th>Gender</th>
+            <th>Skin Color</th>
+            <th>Hair Color</th>
+        </tr>
+    </thead>
+    <tbody id="tbodySW"></tbody>
+</table>
+@*<table class="table table-bordered border-dark">
+    <thead class ="table-dark">
+        <tr>
+            <td>No</td>
+            <td>Name</td>
+            <td>Detail</td>
+        </tr>
+    </thead>
+    <tbody class="tbody-pokemon"></tbody>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="modalSW" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="pokemon-title">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4" id="pokemon-photo"></div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-9"><h5 class="card-title" id="pokemon-name"></h5></div>
+                                            <div class="col-3"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">TYPES</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9"><div class="card-text ms-3" id="pokemon-type"></div></div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">ABILITIES</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-9"><div class="card-text ms-3" id="pokemon-ability"></div></div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">MOVES</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-9"><div class="card-text ms-3" id="pokemon-move"></div></div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">ITEMS</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-9"><div class="card-text ms-3" id="pokemon-item"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4" id="pokemonshiny-photo"></div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <h5 class="card-title">
+                                                    <strong>SHINY MODE</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="col-3"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">HEIGHT</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9"><div class="card-text ms-3" id="pokemon-height"></div></div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">WEIGHT</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-9"><div class="card-text ms-3" id="pokemon-weight"></div></div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <div class="card-text">
+                                                    <span class="badge bg-dark">BASE EXP</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-9"><div class="card-text ms-3 mt-1" id="pokemon-base-exp"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title text-center"><strong>STATS</strong></h5>
+                                <div id="pokemon-stat"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+

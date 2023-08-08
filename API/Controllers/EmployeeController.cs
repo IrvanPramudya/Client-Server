@@ -2,6 +2,7 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +10,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("/api/employee")]
-    [Authorize(Roles = "Employee,Manager,Admin")]
+    /*[Authorize(Roles = "Employee,Manager,Admin")]*/
+    [EnableCors]
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _employee;

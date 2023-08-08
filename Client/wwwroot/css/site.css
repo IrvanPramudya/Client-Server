@@ -1,0 +1,52 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.white-content{
+    color:antiquewhite!important;
+    
+}
+.img-rounded {
+    border-radius: 50%!important;
+}
+.capitalize{
+    text-transform:capitalize;
+}
+.uppercase{
+    text-transform:uppercase;
+}
+.maxcontent{
+    height:100%;
+    width:100%;
+}
+.align-left{
+    text-align:left;
+}
+.text-center{
+    display:grid;
+    align-content:center;
+}
+.seperempat{
+    width:50%;
+    height:50%;
+}
+.bg-tortilla{
+    background-color:#9a7b4f;
+}
+.border-collapse{
+    border-collapse:collapse!important;
+}
