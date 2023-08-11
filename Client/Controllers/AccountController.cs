@@ -44,12 +44,12 @@ namespace Client.Controllers
             {
                 TempData["Error"] = $"Failed to Login! - {result.Message}!";
                 ModelState.AddModelError(string.Empty, result.Message);
-                return View();
+                return RedirectToAction("Index", "Home");
             }
             else if (result.Code == 200)
             {
-                TempData["Success"] = $"Successfully Login! - {result.Data.Token}!";
-                /*HttpContext.Session.SetString("JWToken", result.Data.Token);*/
+                TempData["Success"] = $"Successfully Login!";
+                HttpContext.Session.SetString("JWToken", result.Data.Token);
                 return RedirectToAction("Index", "Home");
             }
             return View();
@@ -62,6 +62,7 @@ namespace Client.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(InsertAccountDto newaccount)
         {
 
@@ -93,6 +94,7 @@ namespace Client.Controllers
             return View((GetViewAccountDto)ListAccount);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(Account account)
         {
             var result = await repository.Put(account.Guid, account);
@@ -107,6 +109,7 @@ namespace Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public  async Task<IActionResult> Delete(Guid guid)
         {
             var result = await repository.Delete(guid);
