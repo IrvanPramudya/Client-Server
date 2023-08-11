@@ -21,6 +21,7 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
 
+
         builder.Services.AddControllers()
                         .ConfigureApiBehaviorOptions(options =>
                         {
@@ -42,7 +43,6 @@ internal class Program
         // Add services to the container.
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<BookingDbContext>(option => option.UseSqlServer(connection));
-
         // Add Service Lifetime Repository
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
         builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();

@@ -5,6 +5,28 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="chart-container" style="position: relative; height:50%; width:50%">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="chart-container" style="position: relative; height:100%; width:100%">
+                    <canvas id="chartAge"></canvas>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 </div>
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["Success"]');
+    </script>
+}
+@section CSS{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+}

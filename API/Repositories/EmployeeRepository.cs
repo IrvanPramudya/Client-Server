@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.Data;
 using API.Models;
+using API.Utilities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
@@ -14,6 +15,11 @@ namespace API.Repositories
         public Employee CheckEmail(string email)
         {
             return _context.Set<Employee>().FirstOrDefault(e=>e.Email == email);
+        }
+
+        public int CountGender(GenderLevel gender)
+        {
+            throw new NotImplementedException();
         }
 
         public Employee? GetEmail(string email)

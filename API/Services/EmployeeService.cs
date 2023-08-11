@@ -52,7 +52,7 @@ namespace API.Services
             }
             return (GetViewEmployeeDto)data;
         }
-        public int Update(GetViewEmployeeDto dto)
+        public int Update(GetAllEmployeeDto dto)
         {
             var data = _repository.GetByGuid(dto.Guid);
             if(data == null)
@@ -61,7 +61,6 @@ namespace API.Services
             }
             Employee toupdate = dto;
             toupdate.CreatedDate = data.CreatedDate;
-            toupdate.Nik = _repository.GetByGuid(dto.Guid).Nik;
             var result = _repository.Update(toupdate);
             return result ? 1 : 0;
         }
@@ -99,6 +98,21 @@ namespace API.Services
                              Major = education.Major,
                              Degree = education.Degree,
                              GPA = education.Gpa
+                         };
+            return result;
+        }
+        public IEnumerable<GetCountedAtribut> CountAtribut()
+        {
+            var result = from employee in _repository.GetAll()
+                         join education in _educationrepository.GetAll() on employee.Guid equals education.Guid
+                         join university in _universityrepository.GetAll() on education.UniversityGuid equals university.Guid
+                         group employee by new { employee.Gender, university.Code } into grouped
+                         select new GetCountedAtribut
+                         {
+                             Gender = grouped.Key.Gender,
+                             CountGender = grouped.Count(),
+                             UniversityCode = grouped.Key.Code,
+                             CountUniversity = grouped.Count(),
                          };
             return result;
         }

@@ -50,3 +50,15 @@ body {
 .border-collapse{
     border-collapse:collapse!important;
 }
+.dt-button-collection{
+
+}
+#colvis {
+    border: 2px solid red;
+    display: inline-block;
+    float: none;
+}
+.max-size{
+    width:100%;
+    height:100%;
+}

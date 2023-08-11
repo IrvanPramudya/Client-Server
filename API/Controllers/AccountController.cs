@@ -2,14 +2,16 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("/api/account")]
-    [Authorize]
+    [Route("/api/account")]/*
+    [Authorize]*/
+    [EnableCors]
     public class AccountController: ControllerBase
     {
         private readonly AccountService _account;
@@ -174,7 +176,7 @@ namespace API.Controllers
                     Message = "Error Generating Token",
                 });
             }
-            return Ok(new ResponseHandler<object>
+            return Ok(new ResponseHandler<TokenDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

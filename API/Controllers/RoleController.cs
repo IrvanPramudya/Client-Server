@@ -2,14 +2,16 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("/api/role")]
-    [Authorize(Roles = "Admin")]
+    [Route("/api/role")]/*
+    [Authorize(Roles = "Admin")]*/
+    [EnableCors]
     public class RoleController: ControllerBase
     {
         private readonly RoleService _role;

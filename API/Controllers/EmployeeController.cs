@@ -21,6 +21,28 @@ namespace API.Controllers
             _employee = employee;
         }
 
+        [HttpGet("Counted")]
+        private IActionResult CountAtribut()
+        {
+            var data = _employee.CountAtribut();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<EmployeeDetailDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                    Data = null
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetCountedAtribut>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -88,35 +110,32 @@ namespace API.Controllers
             });
         }
         [HttpPut]
-        public IActionResult Update(GetViewEmployeeDto employee)
+        public IActionResult Update(GetAllEmployeeDto employee)
         {
             var result = _employee.Update(employee);
             if (result == 0)
             {
-                return StatusCode(500, new ResponseHandler<GetViewEmployeeDto>
+                return StatusCode(500, new ResponseHandler<GetAllEmployeeDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
                     Message = "Internal Server Error",
-                    Data = null
                 });
             }
             if (result == -1)
             {
-                return StatusCode(404, new ResponseHandler<GetViewEmployeeDto>
+                return StatusCode(404, new ResponseHandler<GetAllEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Guid Is Not Found",
-                    Data = null
                 });
             }
-            return Ok(new ResponseHandler<int>
+            return Ok(new ResponseHandler<GetAllEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Data Success Updated",
-                Data = result
             });
         }
         [HttpDelete]
@@ -125,30 +144,27 @@ namespace API.Controllers
             var result = _employee.Delete(guid);
             if (result == 0)
             {
-                return StatusCode(500, new ResponseHandler<GetViewEmployeeDto>
+                return StatusCode(500, new ResponseHandler<GetAllEmployeeDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
                     Message = "Internal Server Error",
-                    Data = null
                 });
             }
             if (result == -1)
             {
-                return StatusCode(404, new ResponseHandler<GetViewEmployeeDto>
+                return StatusCode(404, new ResponseHandler<GetAllEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Guid Is Not Found",
-                    Data = null
                 });
             }
-            return Ok(new ResponseHandler<int>
+            return Ok(new ResponseHandler<GetAllEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Data Success Deleted",
-                Data = result
             });
         }
         [HttpGet("DetailEmployee")]

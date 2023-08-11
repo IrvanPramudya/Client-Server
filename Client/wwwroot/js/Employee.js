@@ -1,19 +1,36 @@
-﻿$(document).ready(function () {
+﻿let gendercount = [0, 0]
+let countkelahiran = [0, 0, 0]
+
+$(document).ready(function () {
+    $('#Table').DataTable({
+        dom: "Blfrtip",
+        buttons: [
+        {
+            extend: 'colvis',
+            postfixButtons: ['colvisRestore'],
+            collectionLayout: 'fixed two-column',
+            className: 'btn btn-primary'
+            }
+            , 'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+});
+$(document).ready(function () {
     let no = 1;
     let table = new DataTable('#myTable', {
         
-        dom: 'Bfrtip',
+        dom: '<"toolbar">frtip Blfrtip',
+        initComplete: function ()  //Adding Custom button in Tools
+        {
+            $("div.toolbar").html('<button type="button" onclick="addNewEntry()">Add a New Record</button>');
+        },
         buttons: [{
             extend: 'colvis',
-            postfixButtons: ['colvisRestore']
+            postfixButtons: ['colvisRestore'],
+            className:'btn btn-primary'
         },
             'copy', 'csv', 'excel', 'pdf', 'print'
         ],
-        language: {
-            buttons: {
-                colvis: 'Change columns'
-            }
-        },
         ajax: {
             url: "https://localhost:7191/api/employee",
             dataSrc: "data",
@@ -155,3 +172,81 @@ function editData(guid) {
         $("#editTable").modal("show");
     })
 }
+$.ajax({
+    url: "https://localhost:7191/api/employee/",
+    type: "GET"
+}).done((result) => {
+    $.each(result.data, (key, val) => {
+        val.gender === 0 ? gendercount[0]++:gendercount[1]++
+
+    })
+    
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Female','Male'],
+            datasets: [{
+                label: 'Gender',
+                data: [gendercount[0],gendercount[1]],
+                borderWidth: 0,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+})
+$.ajax({
+    url: "https://localhost:7191/api/education",
+    type: "GET"
+}).done((result) => {
+    $.each(result.data, (key, val) => {
+        console.log(val)
+        if (val.major === "S1") {
+            countkelahiran[0]++
+        }
+        else if (val.major === "S2") {
+            countkelahiran[1]++
+        }
+        else {
+            countkelahiran[2]++
+        }
+        console.log(countkelahiran)
+    })
+    
+    const chartDegree = document.getElementById('chartAge');
+    new Chart(chartDegree, {
+        type: 'bar',
+        data: {
+            labels: ['S1','S2','S3'],
+            datasets: [{
+                label: ['Degree'],
+                data: [countkelahiran[0],countkelahiran[1],countkelahiran[2]],
+                borderWidth: 0,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    '#9BD0F5',
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+})

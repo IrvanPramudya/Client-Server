@@ -2,14 +2,16 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("/api/service")]
-    [Authorize(Roles = "Manager,Admin")]
+    [Route("/api/service")]/*
+    [Authorize(Roles = "Manager,Admin")]*/
+    [EnableCors]
     public class RoomController: ControllerBase
     {
         private readonly RoomService _service;

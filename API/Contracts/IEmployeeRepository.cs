@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Utilities.Enums;
 
 namespace API.Contracts
 {
@@ -8,5 +9,6 @@ namespace API.Contracts
         string? GetLastNik();
         Employee? GetEmail(string email);
         Employee CheckEmail(string email);
+        int CountGender(GenderLevel gender);
     }
 }
