@@ -9,8 +9,8 @@ using System.Net;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("/api/account")]/*
-    [Authorize]*/
+    [Route("/api/account")]
+    [Authorize(Roles = "Admin")]
     [EnableCors]
     public class AccountController: ControllerBase
     {

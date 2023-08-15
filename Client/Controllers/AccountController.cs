@@ -1,10 +1,12 @@
 ﻿using API.DTOs.Accounts;
 using API.Models;
 using Client.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
 
@@ -27,11 +29,13 @@ namespace Client.Controllers
             return View(ListAccount);
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Login()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginAccountDto login)
         {
             var result = await repository.Login(login);

@@ -2,6 +2,7 @@ using Client.Contracts;
 using Client.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,23 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseStatusCodePages(async context => {
+	var request = context.HttpContext.Request;
+	var response = context.HttpContext.Response;
+
+	if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized))
+	{
+		response.Redirect("/unauthorized");
+	}
+	else if (response.StatusCode.Equals((int)HttpStatusCode.NotFound))
+	{
+		response.Redirect("/notfound");
+	}
+    else if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
+    {
+        response.Redirect("/forbidden");
+    }
+});
 app.UseSession();
 
 //Add JWToken to all incoming HTTP Request Header
@@ -65,5 +83,4 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
-
 app.Run();

@@ -17,11 +17,6 @@ namespace API.Repositories
             return _context.Set<Employee>().FirstOrDefault(e=>e.Email == email);
         }
 
-        public int CountGender(GenderLevel gender)
-        {
-            throw new NotImplementedException();
-        }
-
         public Employee? GetEmail(string email)
         {
             return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(email));

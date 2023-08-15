@@ -72,9 +72,11 @@
                     <a class="btn btn-info" asp-action="Detail" asp-route-id="@item.Guid"><i class="fa-solid fa-circle-info"></i></a>
                     <form action="/employee/delete" method="post" onsubmit="return confirm('Apakah Anda Yakin Ingin menghapus data ini?')">
                         <input type="hidden" value="@item.Guid" name="guid" />
-                        <input type="submit" value="Delete" class="btn btn-danger" onclick="return true"  />
+                        @*<input type="submit" class="btn btn-danger" onclick="return true">*@
+                        <button type="submit" class="btn btn-danger" onclick="return true">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </form>
-                    @*<a class="btn btn-danger" href="employee/delete/@item.Guid"><i class="fa-solid fa-trash"></i></a>*@
             </td>
         </tr>
 }

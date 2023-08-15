@@ -5,9 +5,6 @@
     Layout = "_LoginLayout";
 }
 
-<h1>Login</h1>
-
-<h4>Login Account</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -20,7 +17,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input type="password" asp-for="Password" class="form-control" />
+                <div class="row">
+                    <div class="input-group">
+                        <div class="col-11"><input type="password" asp-for="Password" class="form-control" /></div>
+                        <div class="col-1">
+                            <button type="button" id="showPassword" class="btn btn-link input-group-text">
+                                <i id="eyeIcon" class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="input-group">
+                    <input type="password" asp-for="Password" class="form-control" />
+                    <button type="button" id="showPassword" class="btn btn-link input-group-text justify-content-end">
+                        <i id="eyeIcon" class="fa fa-eye"></i>
+                    </button>
+                </div>*@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-check form-switch">
@@ -34,15 +46,28 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
         toastr.success('@TempData["Success"]');
+    </script>
+    <script>
+        var passwordInput = document.getElementById('Password');
+        var showPasswordButton = document.getElementById('showPassword');
+        var eyeIcon = document.getElementById('eyeIcon');
+
+        showPasswordButton.addEventListener('click', function () {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
     </script>
 }
 @section CSS{

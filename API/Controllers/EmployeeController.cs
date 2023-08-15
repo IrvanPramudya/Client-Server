@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("/api/employee")]
-    /*[Authorize(Roles = "Employee,Manager,Admin")]*/
+    [Authorize(Roles = "Employee,Manager,Admin")]
     [EnableCors]
     public class EmployeeController : ControllerBase
     {
@@ -21,13 +21,14 @@ namespace API.Controllers
             _employee = employee;
         }
 
-        [HttpGet("Counted")]
-        private IActionResult CountAtribut()
+
+        [HttpGet("GetCountedAtribut")]
+        public IActionResult GetCountedAtribut()
         {
             var data = _employee.CountAtribut();
             if (data == null)
             {
-                return StatusCode(404, new ResponseHandler<EmployeeDetailDto>
+                return StatusCode(404, new ResponseHandler<GetCountedAtribut>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -189,9 +190,8 @@ namespace API.Controllers
                 Data = data
             });
         }
-
-        [HttpGet("DetailEmployee{guid}")]
-        private IActionResult GetEmployeeDetailbyGuid(Guid guid)
+        [HttpGet("GetEmployeeDetailByGuid{guid}")]
+        public IActionResult GetEmployeeDetailByGuid(Guid guid)
         {
             var data = _employee.GetEmployeeDetailByGuid(guid);
             if (data == null)
@@ -201,14 +201,13 @@ namespace API.Controllers
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Data is not Found",
-                    Data = null
                 });
             }
             return Ok(new ResponseHandler<EmployeeDetailDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "Data Success Retrieved",
+                Message = "Data Success Deleted",
                 Data = data
             });
         }

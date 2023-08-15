@@ -77,7 +77,6 @@ namespace API.Services
         public EmployeeDetailDto? GetEmployeeDetailByGuid(Guid guid)
         {
             return GetEmployeeDetail().SingleOrDefault(e=>e.EmployeeGuid.Equals(guid));
-
         }
         public IEnumerable<EmployeeDetailDto> GetEmployeeDetail()
         {
@@ -101,18 +100,21 @@ namespace API.Services
                          };
             return result;
         }
-        public IEnumerable<GetCountedAtribut> CountAtribut()
+        public IEnumerable<GetCountedAtribut?>  CountAtribut()
         {
+            var countFemale = 0;
+            var countMale = 0;
+            var countUniversity = 0;
             var result = from employee in _repository.GetAll()
                          join education in _educationrepository.GetAll() on employee.Guid equals education.Guid
                          join university in _universityrepository.GetAll() on education.UniversityGuid equals university.Guid
-                         group employee by new { employee.Gender, university.Code } into grouped
+                         /*group employee by new { employee.Gender, university.Code } into grouped*/
                          select new GetCountedAtribut
                          {
-                             Gender = grouped.Key.Gender,
-                             CountGender = grouped.Count(),
-                             UniversityCode = grouped.Key.Code,
-                             CountUniversity = grouped.Count(),
+                             Gender = employee.Gender,
+                             CountGender = employee.Gender == 0 ? countFemale++ : countMale++,
+                             UniversityCode = university.Code,
+                             CountUniversity = university.Guid == education.UniversityGuid ? countUniversity++ : countUniversity
                          };
             return result;
         }

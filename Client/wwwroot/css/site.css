@@ -36,6 +36,9 @@ body {
 .align-left{
     text-align:left;
 }
+.align-right{
+    text-align:right;
+}
 .text-center{
     display:grid;
     align-content:center;
